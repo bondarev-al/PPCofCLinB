@@ -4,8 +4,7 @@
 #include <QWidget>
 #include <vector>
 #include <QPushButton>
-
-const QSize FLOORS_BUT_SIZE = QSize(22, 22);
+#include "floorbutton.h">
 
 namespace Ui {
 class EditBuildingWindow;
@@ -29,7 +28,7 @@ private slots:
 
 private:
     Ui::EditBuildingWindow *ui;
-    std::vector<QPushButton *> floors_but_vec;
+    std::vector<FloorButton *> floors_but_vec;
 };
 
 #endif // EDITBUILDINGWINDOW_H

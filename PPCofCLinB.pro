@@ -11,6 +11,7 @@ CONFIG += c++11
 SOURCES += \
     editbuildingwindow.cpp \
     editdevicesinbuldingwindow.cpp \
+    floorbutton.cpp \
     main.cpp \
     mainwindow.cpp \
     planningwindow.cpp
@@ -18,6 +19,7 @@ SOURCES += \
 HEADERS += \
     editbuildingwindow.h \
     editdevicesinbuldingwindow.h \
+    floorbutton.h \
     mainwindow.h \
     planningwindow.h
 

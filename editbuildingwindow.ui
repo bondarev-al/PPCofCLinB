@@ -42,10 +42,21 @@
             </widget>
            </item>
            <item>
-            <layout class="QVBoxLayout" name="floors_but_layout"/>
+            <layout class="QVBoxLayout" name="floors_and_plus_but_layout">
+             <item>
+              <layout class="QVBoxLayout" name="floors_but_layout"/>
+             </item>
+             <item>
+              <widget class="QPushButton" name="plus_floor_but">
+               <property name="text">
+                <string>+</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
            <item>
-            <spacer name="verticalSpacer">
+            <spacer name="verticalSpacer_2">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
              </property>
