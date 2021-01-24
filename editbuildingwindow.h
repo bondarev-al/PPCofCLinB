@@ -4,7 +4,8 @@
 #include <QWidget>
 #include <vector>
 #include <QPushButton>
-#include "floorbutton.h">
+#include <QMenuBar>
+#include "floorbutton.h"
 
 namespace Ui {
 class EditBuildingWindow;
@@ -23,11 +24,14 @@ signals:
 
 private slots:
 
-
     void on_menu_but_clicked(bool checked);
+
+    void on_plus_floor_but_clicked();
 
 private:
     Ui::EditBuildingWindow *ui;
+//    QMenuBar *menu_bar;
+//    QMenu    *menu;
     std::vector<FloorButton *> floors_but_vec;
 };
 
