@@ -6,6 +6,7 @@ EditDevicesInBuldingWindow::EditDevicesInBuldingWindow(QWidget *parent) :
     ui(new Ui::EditDevicesInBuldingWindow)
 {
     ui->setupUi(this);
+    ui->line->setStyleSheet("background-color: rgb(255, 0, 0);");
 }
 
 EditDevicesInBuldingWindow::~EditDevicesInBuldingWindow()

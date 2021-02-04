@@ -9,6 +9,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    buildingcell.cpp \
     editbuildingwindow.cpp \
     editdevicesinbuldingwindow.cpp \
     floorbutton.cpp \
@@ -17,6 +18,7 @@ SOURCES += \
     planningwindow.cpp
 
 HEADERS += \
+    buildingcell.h \
     editbuildingwindow.h \
     editdevicesinbuldingwindow.h \
     floorbutton.h \
