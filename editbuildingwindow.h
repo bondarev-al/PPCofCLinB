@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QMenuBar>
 #include "floorbutton.h"
+#include "buildingcell.h"
 
 namespace Ui {
 class EditBuildingWindow;

@@ -13,6 +13,15 @@ EditBuildingWindow::EditBuildingWindow(QWidget *parent) :
 //    menu_layout->addWidget(menu_bar);
 //    ui->edit_layout->addWidget(menu_bar);
 
+    BuildingCell *cell = new BuildingCell(CELL_TYPE_FULL);
+    ui->edit_building_layout->addLayout(cell, 0, 0);
+    BuildingCell *cell1 = new BuildingCell(CELL_TYPE_TOP);
+    ui->edit_building_layout->addLayout(cell1, 0, 1);
+    BuildingCell *cell2 = new BuildingCell(CELL_TYPE_LEFT);
+    ui->edit_building_layout->addLayout(cell2, 1, 0);
+    BuildingCell *cell3 = new BuildingCell(CELL_TYPE_WITHOUT);
+    ui->edit_building_layout->addLayout(cell3, 1, 1);
+
 }
 
 EditBuildingWindow::~EditBuildingWindow()
