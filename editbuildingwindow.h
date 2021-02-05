@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <vector>
+#include <array>
 #include <QPushButton>
 #include <QMenuBar>
 #include "floorbutton.h"

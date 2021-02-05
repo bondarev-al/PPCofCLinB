@@ -86,13 +86,6 @@
        </layout>
       </item>
       <item>
-       <widget class="Line" name="line">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QPushButton" name="menu_but">
         <property name="text">
          <string>В меню</string>

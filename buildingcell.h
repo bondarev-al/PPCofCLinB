@@ -22,7 +22,7 @@ private:
     int type;
     int changeType();
 public:
-    explicit BuildingCell(int cell_type, QWidget *parent = nullptr);
+    explicit BuildingCell(QGridLayout *layout, int row, int colown, int cell_type, QWidget *parent = nullptr);
     int setType(int cell_type);
     ~BuildingCell();
 };

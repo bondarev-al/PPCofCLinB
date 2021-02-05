@@ -13,14 +13,15 @@ EditBuildingWindow::EditBuildingWindow(QWidget *parent) :
 //    menu_layout->addWidget(menu_bar);
 //    ui->edit_layout->addWidget(menu_bar);
 
-    BuildingCell *cell = new BuildingCell(CELL_TYPE_FULL);
-    ui->edit_building_layout->addLayout(cell, 0, 0);
-    BuildingCell *cell1 = new BuildingCell(CELL_TYPE_TOP);
-    ui->edit_building_layout->addLayout(cell1, 0, 1);
-    BuildingCell *cell2 = new BuildingCell(CELL_TYPE_LEFT);
-    ui->edit_building_layout->addLayout(cell2, 1, 0);
-    BuildingCell *cell3 = new BuildingCell(CELL_TYPE_WITHOUT);
-    ui->edit_building_layout->addLayout(cell3, 1, 1);
+    const int n = 10;
+    std::array<std::array<BuildingCell *, n>, n> cell_array;
+    cell_array[0][0] = new BuildingCell(ui->edit_building_layout, 0, 0, CELL_TYPE_FULL);
+    for (int i = 1; i < n; i++)
+    {
+        cell_array[0][i] = new BuildingCell(ui->edit_building_layout, 0, i, CELL_TYPE_TOP);
+        cell_array[i][0] = new BuildingCell(ui->edit_building_layout, i, 0, CELL_TYPE_LEFT);
+        for (int j = 1; j < n ; j++) cell_array[i][j] = new BuildingCell(ui->edit_building_layout, i, j, CELL_TYPE_WITHOUT);
+    }
 
 }
 

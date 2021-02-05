@@ -1,7 +1,9 @@
 #include "buildingcell.h"
 
-BuildingCell::BuildingCell(int cell_type, QWidget *parent):QVBoxLayout(parent), type(cell_type)
+BuildingCell::BuildingCell(QGridLayout *layout, int row, int colown, int cell_type, QWidget *parent):QVBoxLayout(parent), type(cell_type)
 {
+    layout->addLayout(this, row, colown);
+
     central_layout = new QHBoxLayout;
     left_line      = new QFrame;
     right_line     = new QFrame;
@@ -17,8 +19,6 @@ BuildingCell::BuildingCell(int cell_type, QWidget *parent):QVBoxLayout(parent), 
     bottom_line->setFrameShape(QFrame::HLine);
     bottom_line->setFrameShadow(QFrame::Plain);
 
-    changeType();
-
 //    right_line->setStyleSheet("background-color: rgb(255, 0, 0);");
 
     central_layout->addWidget(left_line);
@@ -28,7 +28,9 @@ BuildingCell::BuildingCell(int cell_type, QWidget *parent):QVBoxLayout(parent), 
     this->addLayout(central_layout);
     this->addWidget(bottom_line);
 
+    changeType();
 }
+
 
 int BuildingCell::setType(int cell_type)
 {

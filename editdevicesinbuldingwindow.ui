@@ -222,6 +222,12 @@
       <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
         <widget class="Line" name="line_17">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="lineWidth">
+          <number>0</number>
+         </property>
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
