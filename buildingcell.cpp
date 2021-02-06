@@ -1,32 +1,49 @@
 #include "buildingcell.h"
 
+CellLine::CellLine(QWidget *parent):QFrame(parent)
+{
+    setFrameShadow(QFrame::Plain);
+    setLineWidth(CELL_LINE_WIDTH);
+    setCursor(Qt::PointingHandCursor);
+}
+
+CellVLine::CellVLine(QWidget *parent):CellLine(parent)
+{
+    setFrameShape(QFrame::VLine);
+}
+
+CellHLine::CellHLine(QWidget *parent):CellLine(parent)
+{
+    setFrameShape(QFrame::HLine);
+}
+
 BuildingCell::BuildingCell(QGridLayout *layout, int row, int colown, int cell_type, QWidget *parent):QVBoxLayout(parent), type(cell_type)
 {
     layout->addLayout(this, row, colown);
 
     central_layout = new QHBoxLayout;
-    left_line      = new QFrame;
-    right_line     = new QFrame;
-    top_line       = new QFrame;
-    bottom_line    = new QFrame;
+    left_line      = new CellVLine;
+    right_line     = new CellVLine;
+    top_line       = new CellHLine;
+    bottom_line    = new CellHLine;
 
-    left_line->setFrameShape(QFrame::VLine);
-    left_line->setFrameShadow(QFrame::Plain);
-    left_line->setLineWidth(CELL_LINE_WIDTH);
-    right_line->setFrameShape(QFrame::VLine);
-    right_line->setFrameShadow(QFrame::Plain);
-    right_line->setLineWidth(CELL_LINE_WIDTH);
-    top_line->setFrameShape(QFrame::HLine);
-    top_line->setFrameShadow(QFrame::Plain);
-    top_line->setLineWidth(CELL_LINE_WIDTH);
-    bottom_line->setFrameShape(QFrame::HLine);
-    bottom_line->setFrameShadow(QFrame::Plain);
-    bottom_line->setLineWidth(CELL_LINE_WIDTH);
+//    left_line->setFrameShape(QFrame::VLine);
+//    left_line->setFrameShadow(QFrame::Plain);
+//    left_line->setLineWidth(CELL_LINE_WIDTH);
+//    right_line->setFrameShape(QFrame::VLine);
+//    right_line->setFrameShadow(QFrame::Plain);
+//    right_line->setLineWidth(CELL_LINE_WIDTH);
+//    top_line->setFrameShape(QFrame::HLine);
+//    top_line->setFrameShadow(QFrame::Plain);
+//    top_line->setLineWidth(CELL_LINE_WIDTH);
+//    bottom_line->setFrameShape(QFrame::HLine);
+//    bottom_line->setFrameShadow(QFrame::Plain);
+//    bottom_line->setLineWidth(CELL_LINE_WIDTH);
 
-    left_line->setCursor(Qt::PointingHandCursor);
-    right_line->setCursor(Qt::PointingHandCursor);
-    top_line->setCursor(Qt::PointingHandCursor);
-    bottom_line->setCursor(Qt::PointingHandCursor);
+//    left_line->setCursor(Qt::PointingHandCursor);
+//    right_line->setCursor(Qt::PointingHandCursor);
+//    top_line->setCursor(Qt::PointingHandCursor);
+//    bottom_line->setCursor(Qt::PointingHandCursor);
 
 
 //    right_line->setStyleSheet("background-color: rgb(255, 0, 0);");
