@@ -13,7 +13,7 @@ EditBuildingWindow::EditBuildingWindow(QWidget *parent) :
 //    menu_layout->addWidget(menu_bar);
 //    ui->edit_layout->addWidget(menu_bar);
 
-    const int n = 10;
+    const int n = 5;
     std::array<std::array<BuildingCell *, n>, n> cell_array;
     cell_array[0][0] = new BuildingCell(ui->edit_building_layout, 0, 0, CELL_TYPE_FULL);
     for (int i = 1; i < n; i++)

@@ -20,6 +20,12 @@
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
         <widget class="Line" name="line_13">
+         <property name="frameShadow">
+          <enum>QFrame::Plain</enum>
+         </property>
+         <property name="lineWidth">
+          <number>3</number>
+         </property>
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
