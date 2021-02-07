@@ -5,11 +5,11 @@ CellLine::CellLine(QWidget *parent):QFrame(parent)
     setFrameShadow(QFrame::Plain);
     setLineWidth(CELL_LINE_WIDTH);
     setCursor(Qt::PointingHandCursor);
+    setStyleSheet("background-color: rgb(255, 0, 0);");
 }
 
 void CellLine::enterEvent(QEvent *event)
 {
-    setStyleSheet("background-color: rgb(255, 0, 0);");
     setLineWidth(1);
 }
 
