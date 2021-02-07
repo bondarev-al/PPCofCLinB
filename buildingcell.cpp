@@ -7,6 +7,22 @@ CellLine::CellLine(QWidget *parent):QFrame(parent)
     setCursor(Qt::PointingHandCursor);
 }
 
+void CellLine::enterEvent(QEvent *event)
+{
+    setStyleSheet("background-color: rgb(255, 0, 0);");
+    setLineWidth(1);
+}
+
+void CellLine::leaveEvent(QEvent *event)
+{
+    if ( ! wall ) setLineWidth(3);
+}
+
+void CellLine::mousePressEvent(QMouseEvent *event)
+{
+    wall = ! wall;
+}
+
 CellVLine::CellVLine(QWidget *parent):CellLine(parent)
 {
     setFrameShape(QFrame::VLine);
@@ -26,6 +42,9 @@ BuildingCell::BuildingCell(QGridLayout *layout, int row, int colown, int cell_ty
     right_line     = new CellVLine;
     top_line       = new CellHLine;
     bottom_line    = new CellHLine;
+
+//    right_line->setFrameShadow(QFrame::Plain);
+//    right_line->setFrameShape(QFrame::VLine);
 
 //    right_line->setStyleSheet("background-color: rgb(255, 0, 0);");
 

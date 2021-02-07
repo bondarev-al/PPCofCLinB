@@ -14,8 +14,14 @@ const int CELL_LINE_WIDTH      = 3;
 class CellLine: public QFrame
 {
     Q_OBJECT
+protected:
+    bool wall;
+    void enterEvent(QEvent *event) override;
+    void leaveEvent(QEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
 public:
     explicit CellLine(QWidget *parent = nullptr);
+    bool isWall(){ return wall; }
 };
 
 class CellVLine: public CellLine
