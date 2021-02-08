@@ -22,6 +22,7 @@ protected:
 public:
     explicit CellLine(QWidget *parent = nullptr);
     bool isWall(){ return wall; }
+    bool setWall(bool w);
 };
 
 class CellVLine: public CellLine
@@ -52,6 +53,7 @@ private:
 public:
     explicit BuildingCell(QGridLayout *layout, int row, int colown, int cell_type, QWidget *parent = nullptr);
     int setType(int cell_type);
+    void setWalls(bool bottom_wall = false, bool right_wall = false, bool left_wall = false, bool top_wall = false);
     ~BuildingCell();
 };
 

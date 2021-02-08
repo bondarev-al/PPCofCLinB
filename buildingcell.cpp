@@ -6,6 +6,7 @@ CellLine::CellLine(QWidget *parent):QFrame(parent)
     setLineWidth(CELL_LINE_WIDTH);
     setCursor(Qt::PointingHandCursor);
     setStyleSheet("background-color: rgb(255, 0, 0);");
+    wall = false;
 }
 
 void CellLine::enterEvent(QEvent *event)
@@ -21,6 +22,12 @@ void CellLine::leaveEvent(QEvent *event)
 void CellLine::mousePressEvent(QMouseEvent *event)
 {
     wall = ! wall;
+}
+
+bool CellLine::setWall(bool w)
+{
+    wall = w;
+    return wall;
 }
 
 CellVLine::CellVLine(QWidget *parent):CellLine(parent)
@@ -88,6 +95,14 @@ int BuildingCell::changeType()
             break;
     }
     return type;
+}
+
+void BuildingCell::setWalls(bool bottom_wall, bool right_wall, bool left_wall, bool top_wall)
+{
+    bottom_line->setWall(bottom_wall);
+    right_line->setWall(right_wall);
+    left_line->setWall(left_wall);
+    top_line->setWall(top_wall);
 }
 
 BuildingCell::~BuildingCell()
