@@ -6,23 +6,26 @@ EditBuildingWindow::EditBuildingWindow(QWidget *parent) :
     ui(new Ui::EditBuildingWindow)
 {
     ui->setupUi(this);
-//    QVBoxLayout *menu_layout = new QVBoxLayout(this);
-//    menu_bar = new QMenuBar(this);
-//    menu     = new QMenu("Меню");
-//    menu_bar->addMenu(menu);
-//    menu_layout->addWidget(menu_bar);
-//    ui->edit_layout->addWidget(menu_bar);
+    setSize(5, 4);
 
-    const int n = 5;
-    std::array<std::array<BuildingCell *, n>, n> cell_array;
-    cell_array[0][0] = new BuildingCell(ui->edit_building_layout, 0, 0, CELL_TYPE_FULL);
-    for (int i = 1; i < n; i++)
+}
+
+bool EditBuildingWindow::setSize(int height, int width)
+{
+    if ((width < 1) || (height < 1)) return false;
+    width_floor  = width;
+    height_floor = height;
+    cell_vector.clear();
+    cell_vector.push_back(std::vector<BuildingCell *>());
+    cell_vector[0].push_back(new BuildingCell(ui->edit_building_layout, 0, 0, CELL_TYPE_FULL));
+    for (int i = 1; i < width_floor ; i++)  cell_vector[0].push_back(new BuildingCell(ui->edit_building_layout, 0, i, CELL_TYPE_TOP));
+    for (int i = 1; i < height_floor; i++)
     {
-        cell_array[0][i] = new BuildingCell(ui->edit_building_layout, 0, i, CELL_TYPE_TOP);
-        cell_array[i][0] = new BuildingCell(ui->edit_building_layout, i, 0, CELL_TYPE_LEFT);
-        for (int j = 1; j < n ; j++) cell_array[i][j] = new BuildingCell(ui->edit_building_layout, i, j, CELL_TYPE_WITHOUT);
+        cell_vector.push_back(std::vector<BuildingCell *>());
+        cell_vector[i].push_back(new BuildingCell(ui->edit_building_layout, i, 0, CELL_TYPE_LEFT));
+        for (int j = 1; j < width_floor ; j++)  cell_vector[i].push_back(new BuildingCell(ui->edit_building_layout, i, j, CELL_TYPE_WITHOUT));
     }
-
+    return true;
 }
 
 EditBuildingWindow::~EditBuildingWindow()

@@ -19,6 +19,7 @@ class EditBuildingWindow : public QWidget
 
 public:
     explicit EditBuildingWindow(QWidget *parent = nullptr);
+    bool setSize(int height, int width);
     ~EditBuildingWindow();
 
 signals:
@@ -34,7 +35,11 @@ private:
     Ui::EditBuildingWindow *ui;
 //    QMenuBar *menu_bar;
 //    QMenu    *menu;
+    int width_floor;
+    int height_floor;
     std::vector<FloorButton *> floors_but_vec;
+    std::vector<bool *>        floors_walls;
+    std::vector<std::vector<BuildingCell *>> cell_vector;
 };
 
 #endif // EDITBUILDINGWINDOW_H
