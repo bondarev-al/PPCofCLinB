@@ -21,6 +21,7 @@ public:
     explicit EditBuildingWindow(QWidget *parent = nullptr);
     bool setSize(int height, int width);
     ~EditBuildingWindow();
+    void saveFloorWalls();
 
 signals:
     void hidden();
@@ -37,6 +38,7 @@ private:
 //    QMenu    *menu;
     int width_floor;
     int height_floor;
+    int floor_number;
     std::vector<FloorButton *> floors_but_vec;
     std::vector<bool *>        floors_walls;
     std::vector<std::vector<BuildingCell *>> cell_vector;

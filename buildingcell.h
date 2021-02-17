@@ -54,6 +54,10 @@ public:
     explicit BuildingCell(QGridLayout *layout, int row, int colown, int cell_type, QWidget *parent = nullptr);
     int setType(int cell_type);
     void setWalls(bool bottom_wall = false, bool right_wall = false, bool left_wall = false, bool top_wall = false);
+    bool leftLineIsWall(){return left_line->isWall();}
+    bool rightLineIsWall(){return right_line->isWall();}
+    bool topLineIsWall(){return top_line->isWall();}
+    bool bottomLineIsWall(){return bottom_line->isWall();}
     ~BuildingCell();
 };
 
