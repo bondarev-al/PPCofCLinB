@@ -22,6 +22,7 @@ public:
     bool setSize(int height, int width);
     ~EditBuildingWindow();
     void saveFloorWalls();
+    void showFloor(int floor_num);
 
 signals:
     void hidden();
@@ -32,6 +33,10 @@ private slots:
 
     void on_plus_floor_but_clicked();
 
+    void on_test_save_but_clicked();
+
+    void on_test_show_floor_clicked();
+
 private:
     Ui::EditBuildingWindow *ui;
 //    QMenuBar *menu_bar;
@@ -39,9 +44,9 @@ private:
     int width_floor;
     int height_floor;
     int floor_number;
-    std::vector<FloorButton *> floors_but_vec;
-    std::vector<bool *>        floors_walls;
-    std::vector<std::vector<BuildingCell *>> cell_vector;
+    std::vector<FloorButton *>                            floors_but_vec;
+    std::vector<std::vector<std::vector<Walls>>>          floors_walls;
+    std::vector<std::vector<BuildingCell *>>              cell_vector;
 };
 
 #endif // EDITBUILDINGWINDOW_H

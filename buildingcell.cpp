@@ -19,6 +19,12 @@ void CellLine::leaveEvent(QEvent *event)
     if ( ! wall ) setLineWidth(3);
 }
 
+void CellLine::repaintLine()
+{
+    setLineWidth(3);
+    if ( wall ) setLineWidth(1);
+}
+
 void CellLine::mousePressEvent(QMouseEvent *event)
 {
     wall = ! wall;
@@ -103,6 +109,14 @@ void BuildingCell::setWalls(bool bottom_wall, bool right_wall, bool left_wall, b
     right_line->setWall(right_wall);
     left_line->setWall(left_wall);
     top_line->setWall(top_wall);
+}
+
+void BuildingCell::repaintLines()
+{
+    bottom_line->repaintLine();
+    right_line->repaintLine();
+    left_line->repaintLine();
+    top_line->repaintLine();
 }
 
 BuildingCell::~BuildingCell()
