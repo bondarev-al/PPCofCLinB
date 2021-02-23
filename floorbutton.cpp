@@ -2,9 +2,9 @@
 
 FloorButton::FloorButton(QVBoxLayout *layout, QWidget *parent):QPushButton(parent)
 {
-    number_of_floors++;
     floor_number = number_of_floors;
-    this->setText(QString::number(floor_number));
+    number_of_floors++;
+    this->setText(QString::number(number_of_floors));
     //this->setFixedSize(FLOORS_BUT_SIZE);
     layout->addWidget(this);
 }

@@ -23,6 +23,7 @@ public:
     ~EditBuildingWindow();
     void saveFloorWalls();
     void showFloor(int floor_num);
+    void resetFloorWalls(int floor_num);
 
 signals:
     void hidden();
@@ -33,9 +34,7 @@ private slots:
 
     void on_plus_floor_but_clicked();
 
-    void on_test_save_but_clicked();
-
-    void on_test_show_floor_clicked();
+    void on_floor_but_clicked();
 
 private:
     Ui::EditBuildingWindow *ui;
