@@ -24,6 +24,7 @@ public:
     void saveFloorWalls();
     void showFloor(int floor_num);
     void resetFloorWalls(int floor_num);
+    void changeFloorLabel();
 
 signals:
     void hidden();
