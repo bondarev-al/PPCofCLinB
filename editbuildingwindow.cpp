@@ -87,7 +87,7 @@ void EditBuildingWindow::on_floor_but_clicked()
 void EditBuildingWindow::on_sizeAct_triggered()
 {
     int height = QInputDialog::getInt(nullptr, "Ввод количества строк", "Количество строк:", height_floor, 1, 10);
-    int width = QInputDialog::getInt(nullptr, "Ввод количества столбцов", "Количество стобцов:", width_floor, 1, 15);
+    int width = QInputDialog::getInt(nullptr, "Ввод количества столбцов", "Количество столбцов:", width_floor, 1, 15);
     saveFloorWalls();
     setSize(height, width);
     showFloor(floor_number);
