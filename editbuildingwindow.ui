@@ -15,6 +15,9 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
+    <layout class="QVBoxLayout" name="menu_layout"/>
+   </item>
+   <item>
     <widget class="QFrame" name="main_frame">
      <property name="frameShape">
       <enum>QFrame::Box</enum>

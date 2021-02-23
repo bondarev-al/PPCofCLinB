@@ -6,17 +6,25 @@ EditBuildingWindow::EditBuildingWindow(QWidget *parent) :
     ui(new Ui::EditBuildingWindow)
 {
     ui->setupUi(this);
-//    QVBoxLayout *menu_layout = new QVBoxLayout(this);
-//    menu_bar = new QMenuBar(this);
-//    menu     = new QMenu("Меню");
-//    menu_bar->addMenu(menu);
-//    menu_layout->addWidget(menu_bar);
-//    ui->edit_layout->addWidget(menu_bar);
+    setupMenu();
     floor_number = 0;
     floors_but_vec.push_back(new FloorButton(ui->floors_but_layout, ui->floors_frame));
     connect(floors_but_vec.back(), SIGNAL(clicked()), this, SLOT(on_floor_but_clicked()));
     setSize(5, 4);
     floors_walls.push_back(std::vector<std::vector<Walls>>());
+}
+
+void EditBuildingWindow::setupMenu()
+{
+    menu_bar = new QMenuBar();
+    menu     = new QMenu("Действия");
+    menu_bar->addMenu(menu);
+    menu->addAction("Создать новый файл");
+    menu->addAction("Открыть файл");
+    menu->addAction("Сохранить файл");
+    menu->addSeparator();
+    menu->addAction("Изменить сетку поля");
+    ui->menu_layout->addWidget(menu_bar);
 }
 
 bool EditBuildingWindow::setSize(int height, int width)

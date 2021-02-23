@@ -25,6 +25,7 @@ public:
     void showFloor(int floor_num);
     void resetFloorWalls(int floor_num);
     void changeFloorLabel();
+    void setupMenu();
 
 signals:
     void hidden();
@@ -39,8 +40,8 @@ private slots:
 
 private:
     Ui::EditBuildingWindow *ui;
-//    QMenuBar *menu_bar;
-//    QMenu    *menu;
+    QMenuBar *menu_bar;
+    QMenu    *menu;
     int width_floor;
     int height_floor;
     int floor_number;
