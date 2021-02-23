@@ -55,6 +55,9 @@ void EditBuildingWindow::on_plus_floor_but_clicked()
     floors_walls.push_back(std::vector<std::vector<Walls>>());
     saveFloorWalls();
     resetFloorWalls(floors_but_vec.back()->getFloorNumber());
+    QString string = "Этаж - ";
+    string += QString::number(floor_number + 1);
+    ui->floor_num_lab->setText(string);
     connect(floors_but_vec.back(), SIGNAL(clicked()), this, SLOT(on_floor_but_clicked()));
 }
 
@@ -105,4 +108,7 @@ void EditBuildingWindow::showFloor(int floor_num)
                                         floors_walls[floor_number][i][j].top_wall);
             cell_vector[i][j]->repaintLines();
         }
+    QString string = "Этаж - ";
+    string += QString::number(floor_number + 1);
+    ui->floor_num_lab->setText(string);
 }
