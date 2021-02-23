@@ -6,6 +6,7 @@
 #include <array>
 #include <QPushButton>
 #include <QMenuBar>
+#include <QInputDialog>
 #include "floorbutton.h"
 #include "buildingcell.h"
 
@@ -37,6 +38,8 @@ private slots:
     void on_plus_floor_but_clicked();
 
     void on_floor_but_clicked();
+
+    void on_sizeAct_triggered();
 
 private:
     Ui::EditBuildingWindow *ui;

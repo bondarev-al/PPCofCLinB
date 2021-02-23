@@ -10,8 +10,8 @@ EditBuildingWindow::EditBuildingWindow(QWidget *parent) :
     floor_number = 0;
     floors_but_vec.push_back(new FloorButton(ui->floors_but_layout, ui->floors_frame));
     connect(floors_but_vec.back(), SIGNAL(clicked()), this, SLOT(on_floor_but_clicked()));
-    setSize(5, 4);
     floors_walls.push_back(std::vector<std::vector<Walls>>());
+    setSize(5, 4);
 }
 
 void EditBuildingWindow::setupMenu()
@@ -19,11 +19,12 @@ void EditBuildingWindow::setupMenu()
     menu_bar = new QMenuBar();
     menu     = new QMenu("Действия");
     menu_bar->addMenu(menu);
-    menu->addAction("Создать новый файл");
-    menu->addAction("Открыть файл");
-    menu->addAction("Сохранить файл");
+    QAction *createAct = menu->addAction("Создать новый файл");
+    QAction *openAct   = menu->addAction("Открыть файл");
+    QAction *saveAct   = menu->addAction("Сохранить файл");
     menu->addSeparator();
-    menu->addAction("Изменить сетку поля");
+    QAction *sizeAct   = menu->addAction("Изменить сетку поля");
+    connect(sizeAct, SIGNAL(triggered()), this, SLOT(on_sizeAct_triggered()));
     ui->menu_layout->addWidget(menu_bar);
 }
 
@@ -33,7 +34,17 @@ bool EditBuildingWindow::setSize(int height, int width)
     width_floor  = width;
     height_floor = height;
     cell_vector.clear();
-    floors_walls.clear();
+    for (int i = 0; i < FloorButton::number_of_floors; i++)
+    {
+        floors_walls[i].resize(height_floor);
+        for (int j = 0; j < height_floor; j++)
+            floors_walls[i][j].resize(width_floor);
+    }
+    while (QLayoutItem* item = ui->edit_building_layout->takeAt(0))
+    {
+        delete item->widget();
+        delete item;
+    }
     cell_vector.push_back(std::vector<BuildingCell *>());
     cell_vector[0].push_back(new BuildingCell(ui->edit_building_layout, 0, 0, CELL_TYPE_FULL));
     for (int i = 1; i < width_floor ; i++)  cell_vector[0].push_back(new BuildingCell(ui->edit_building_layout, 0, i, CELL_TYPE_TOP));
@@ -72,6 +83,16 @@ void EditBuildingWindow::on_floor_but_clicked()
     saveFloorWalls();
     showFloor(static_cast<FloorButton *>(sender())->getFloorNumber());
 }
+
+void EditBuildingWindow::on_sizeAct_triggered()
+{
+    int height = QInputDialog::getInt(nullptr, "Ввод количества строк", "Количество строк:", 1, 1, 10);
+    int width = QInputDialog::getInt(nullptr, "Ввод количества столбцов", "Количество стобцов:", 1, 1, 10);
+    saveFloorWalls();
+    setSize(height, width);
+    showFloor(floor_number);
+}
+
 
 void EditBuildingWindow::saveFloorWalls()
 {

@@ -121,5 +121,9 @@ void BuildingCell::repaintLines()
 
 BuildingCell::~BuildingCell()
 {
-
+    delete central_layout;
+    delete top_line;
+    delete left_line;
+    delete right_line;
+    delete bottom_line;
 }
