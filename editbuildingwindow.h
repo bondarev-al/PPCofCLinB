@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include <QMenuBar>
 #include <QInputDialog>
+#include <QFileDialog>
 #include "floorbutton.h"
 #include "buildingcell.h"
 
@@ -23,6 +24,7 @@ public:
     bool setSize(int height, int width);
     ~EditBuildingWindow();
     void saveFloorWalls();
+    void putEmptyFloorWalls(int floor_num);
     void showFloor(int floor_num);
     void resetFloorWalls(int floor_num);
     void changeFloorLabel();
@@ -41,6 +43,14 @@ private slots:
 
     void on_sizeAct_triggered();
 
+    void on_createAct_triggered();
+
+    void on_openAct_triggered();
+
+    void on_saveAct_triggered();
+
+    void on_saveAsAct_triggered();
+
 private:
     Ui::EditBuildingWindow *ui;
     QMenuBar *menu_bar;
@@ -48,6 +58,7 @@ private:
     int width_floor;
     int height_floor;
     int floor_number;
+    QString fileName;
     std::vector<FloorButton *>                            floors_but_vec;
     std::vector<std::vector<std::vector<Walls>>>          floors_walls;
     std::vector<std::vector<BuildingCell *>>              cell_vector;

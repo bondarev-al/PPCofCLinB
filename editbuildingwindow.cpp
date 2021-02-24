@@ -11,6 +11,7 @@ EditBuildingWindow::EditBuildingWindow(QWidget *parent) :
     floors_but_vec.push_back(new FloorButton(ui->floors_but_layout, ui->floors_frame));
     connect(floors_but_vec.back(), SIGNAL(clicked()), this, SLOT(on_floor_but_clicked()));
     floors_walls.push_back(std::vector<std::vector<Walls>>());
+    putEmptyFloorWalls(floors_but_vec.back()->getFloorNumber());
     setSize(5, 4);
 }
 
@@ -19,13 +20,21 @@ void EditBuildingWindow::setupMenu()
     menu_bar = new QMenuBar();
     menu     = new QMenu("Действия");
     menu_bar->addMenu(menu);
-    QAction *createAct = menu->addAction("Создать новый файл");
-    QAction *openAct   = menu->addAction("Открыть файл");
-    QAction *saveAct   = menu->addAction("Сохранить файл");
+    QAction *createAct   = menu->addAction("Создать новый файл");
+    QAction *openAct     = menu->addAction("Открыть файл");
+    QAction *saveAct     = menu->addAction("Сохранить файл");
+    QAction *saveAsAct   = menu->addAction("Сохранить как...");
     menu->addSeparator();
-    QAction *sizeAct   = menu->addAction("Изменить сетку поля");
-    connect(sizeAct, SIGNAL(triggered()), this, SLOT(on_sizeAct_triggered()));
+    QAction *sizeAct     = menu->addAction("Изменить сетку поля");
+    connect(sizeAct,     SIGNAL(triggered()), this, SLOT(on_sizeAct_triggered()));
+    connect(saveAct,     SIGNAL(triggered()), this, SLOT(on_saveAct_triggered()));
+    connect(saveAsAct,   SIGNAL(triggered()), this, SLOT(on_saveAsAct_triggered()));
+    connect(openAct,     SIGNAL(triggered()), this, SLOT(on_openAct_triggered()));
+    connect(createAct,   SIGNAL(triggered()), this, SLOT(on_createAct_triggered()));
     ui->menu_layout->addWidget(menu_bar);
+
+    createAct->setEnabled(false);
+    saveAct->setEnabled(false);
 }
 
 bool EditBuildingWindow::setSize(int height, int width)
@@ -72,6 +81,7 @@ void EditBuildingWindow::on_plus_floor_but_clicked()
 {
     floors_but_vec.push_back(new FloorButton(ui->floors_but_layout, ui->floors_frame));
     floors_walls.push_back(std::vector<std::vector<Walls>>());
+    putEmptyFloorWalls(floors_but_vec.back()->getFloorNumber());
     saveFloorWalls();
     resetFloorWalls(floors_but_vec.back()->getFloorNumber());
     changeFloorLabel();
@@ -93,6 +103,84 @@ void EditBuildingWindow::on_sizeAct_triggered()
     showFloor(floor_number);
 }
 
+void EditBuildingWindow::on_createAct_triggered()
+{
+
+}
+
+void EditBuildingWindow::on_openAct_triggered()
+{
+    fileName = QFileDialog::getOpenFileName(0, "Открытие файла здания", "", "*.bld");
+    QFile file(fileName);
+    int h, w, num;
+    file.open(QIODevice::ReadOnly);
+    file.read((char *)&h, sizeof(h));
+    file.read((char *)&w, sizeof(w));
+    file.read((char *)&num, sizeof(num));
+
+    setSize(h, w);
+    if (num >= FloorButton::number_of_floors)
+        for (int i = FloorButton::number_of_floors; i < num ;  i++)
+        {
+            floors_but_vec.push_back(new FloorButton(ui->floors_but_layout, ui->floors_frame));
+            floors_walls.push_back(std::vector<std::vector<Walls>>());
+            putEmptyFloorWalls(floors_but_vec.back()->getFloorNumber());
+            connect(floors_but_vec.back(), SIGNAL(clicked()), this, SLOT(on_floor_but_clicked()));
+        }
+    else while ( FloorButton::number_of_floors > num )
+        {
+            FloorButton::number_of_floors--;
+            floors_walls.pop_back();
+            QLayoutItem* item = ui->floors_but_layout->takeAt(FloorButton::number_of_floors);
+            delete item->widget();
+            delete item;
+            floors_but_vec.pop_back();
+        }
+
+    for (int floor = 0; floor < FloorButton::number_of_floors ; floor++)
+    {
+        floors_walls[floor].clear();
+        for (int i = 0; i < height_floor; i++)
+        {
+            floors_walls[floor].push_back(std::vector<Walls>());
+            for (int j = 0; j < width_floor ; j++)
+            {
+                Walls walls;
+                file.read((char *)&walls, sizeof(Walls));
+                floors_walls[floor][i].push_back(walls);
+            }
+        }
+    }
+    showFloor(0);
+
+    file.close();
+}
+
+void EditBuildingWindow::on_saveAct_triggered()
+{
+
+}
+
+void EditBuildingWindow::on_saveAsAct_triggered()
+{
+    fileName = QFileDialog::getSaveFileName(0, "Сохранить файл", "", "*.bld");
+
+    QFile file(fileName);
+    file.open(QIODevice::WriteOnly);
+
+    file.write((char *)&height_floor, sizeof(height_floor));
+    file.write((char *)&width_floor, sizeof(height_floor));
+    file.write((char *)&FloorButton::number_of_floors, sizeof(FloorButton::number_of_floors));
+
+    saveFloorWalls();
+
+    for (int floor = 0; floor < FloorButton::number_of_floors ; floor++)
+        for (int i = 0; i < height_floor; i++)
+            for (int j = 0; j < width_floor ; j++)
+                file.write((char *)&floors_walls[floor][i][j], sizeof(Walls));
+
+    file.close();
+}
 
 void EditBuildingWindow::saveFloorWalls()
 {
@@ -108,6 +196,24 @@ void EditBuildingWindow::saveFloorWalls()
             walls.left_wall   = cell_vector[i][j]->isLeftLineWall();
             walls.top_wall    = cell_vector[i][j]->isTopLineWall();
             floors_walls[floor_number][i].push_back(walls);
+        }
+    }
+}
+
+void EditBuildingWindow::putEmptyFloorWalls(int floor_num)
+{
+    floors_walls[floor_num].clear();
+    for (int i = 0; i < height_floor; i++)
+    {
+        floors_walls[floor_num].push_back(std::vector<Walls>());
+        for (int j = 0; j < width_floor ; j++)
+        {
+            Walls walls;
+            walls.bottom_wall = false;
+            walls.right_wall  = false;
+            walls.left_wall   = false;
+            walls.top_wall    = false;
+            floors_walls[floor_num][i].push_back(walls);
         }
     }
 }
