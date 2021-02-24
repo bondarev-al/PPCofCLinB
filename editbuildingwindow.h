@@ -55,6 +55,7 @@ private:
     Ui::EditBuildingWindow *ui;
     QMenuBar *menu_bar;
     QMenu    *menu;
+    QAction  *saveAct;
     int width_floor;
     int height_floor;
     int floor_number;
