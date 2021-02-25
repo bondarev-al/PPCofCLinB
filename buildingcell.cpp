@@ -2,27 +2,26 @@
 
 CellLine::CellLine(QWidget *parent):QFrame(parent)
 {
-    setFrameShadow(QFrame::Plain);
+    setFrameShadow(QFrame::Raised);
     setLineWidth(CELL_LINE_WIDTH);
     setCursor(Qt::PointingHandCursor);
-    setStyleSheet("background-color: rgb(255, 0, 0);");
     wall = false;
 }
 
 void CellLine::enterEvent(QEvent *event)
 {
-    setLineWidth(1);
+    setStyleSheet(PAINTED_LINE_STYLE);
 }
 
 void CellLine::leaveEvent(QEvent *event)
 {
-    if ( ! wall ) setLineWidth(3);
+    if ( ! wall ) setStyleSheet("");
 }
 
 void CellLine::repaintLine()
 {
-    setLineWidth(3);
-    if ( wall ) setLineWidth(1);
+    setStyleSheet("");
+    if ( wall ) setStyleSheet(PAINTED_LINE_STYLE);
 }
 
 void CellLine::mousePressEvent(QMouseEvent *event)
