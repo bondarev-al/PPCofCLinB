@@ -7,7 +7,7 @@
 #include <QInputDialog>
 #include <QFileDialog>
 #include "floorbutton.h"
-#include "buildingcelldevices.h"
+#include "buildingcell.h"
 
 namespace Ui {
 class EditDevicesInBuldingWindow;

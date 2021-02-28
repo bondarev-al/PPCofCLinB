@@ -20,19 +20,41 @@ struct Walls
     bool top_wall;
 };
 
-class CellLine: public QFrame
+class CellLineWithoutMouse: public QFrame
 {
     Q_OBJECT
 protected:
     bool wall;
+public:
+    explicit CellLineWithoutMouse(QWidget *parent = nullptr);
+    bool isWall(){ return wall; }
+    bool setWall(bool w);
+    void repaintLine();
+};
+
+class CellVLineWithoutMouse: public CellLineWithoutMouse
+{
+    Q_OBJECT
+public:
+    explicit CellVLineWithoutMouse(QWidget *parent = nullptr);
+};
+
+class CellHLineWithoutMouse: public CellLineWithoutMouse
+{
+    Q_OBJECT
+public:
+    explicit CellHLineWithoutMouse(QWidget *parent = nullptr);
+};
+
+class CellLine: public CellLineWithoutMouse
+{
+    Q_OBJECT
+protected:
     void enterEvent(QEvent *event) override;
     void leaveEvent(QEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
 public:
     explicit CellLine(QWidget *parent = nullptr);
-    bool isWall(){ return wall; }
-    bool setWall(bool w);
-    void repaintLine();
 };
 
 class CellVLine: public CellLine
@@ -49,19 +71,19 @@ public:
     explicit CellHLine(QWidget *parent = nullptr);
 };
 
-class BuildingCell: public QVBoxLayout
+class ABuildingCell: public QVBoxLayout
 {
     Q_OBJECT
-private:
-    CellVLine *left_line;
-    CellVLine *right_line;
-    CellHLine *top_line;
-    CellHLine *bottom_line;
+protected:
+    CellLineWithoutMouse *left_line;
+    CellLineWithoutMouse *right_line;
+    CellLineWithoutMouse *top_line;
+    CellLineWithoutMouse *bottom_line;
     QHBoxLayout *central_layout;
     int type;
     int changeType();
 public:
-    explicit BuildingCell(QGridLayout *layout, int row, int colown, int cell_type, QWidget *parent = nullptr);
+    explicit ABuildingCell(QGridLayout *layout, int row, int colown, int cell_type, QWidget *parent = nullptr);
     int setType(int cell_type);
     void setWalls(bool bottom_wall = false, bool right_wall = false, bool left_wall = false, bool top_wall = false);
     bool isLeftLineWall(){return left_line->isWall();}
@@ -69,7 +91,22 @@ public:
     bool isTopLineWall(){return top_line->isWall();}
     bool isBottomLineWall(){return bottom_line->isWall();}
     void repaintLines();
-    ~BuildingCell();
+    ~ABuildingCell();
+};
+
+class BuildingCell: public ABuildingCell
+{
+    Q_OBJECT
+
+public:
+    explicit BuildingCell(QGridLayout *layout, int row, int colown, int cell_type, QWidget *parent = nullptr);
+};
+
+class BuildingCellDevices: public ABuildingCell
+{
+    Q_OBJECT
+public:
+    explicit BuildingCellDevices(QGridLayout *layout, int row, int colown, int cell_type, QWidget *parent = nullptr);
 };
 
 #endif // BUILDINGCELL_H
