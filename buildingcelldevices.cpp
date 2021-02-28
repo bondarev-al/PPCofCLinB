@@ -1,59 +1,44 @@
-#include "buildingcell.h"
+#include "buildingcelldevices.h"
 
-CellLine::CellLine(QWidget *parent):QFrame(parent)
+CellLineDevices::CellLineDevices(QWidget *parent):QFrame(parent)
 {
     setFrameShadow(QFrame::Raised);
     setLineWidth(CELL_LINE_WIDTH);
-    setCursor(Qt::PointingHandCursor);
     wall = false;
 }
 
-void CellLine::enterEvent(QEvent *event)
-{
-    setStyleSheet(PAINTED_LINE_STYLE);
-}
-
-void CellLine::leaveEvent(QEvent *event)
-{
-    if ( ! wall ) setStyleSheet("");
-}
-
-void CellLine::repaintLine()
+void CellLineDevices::repaintLine()
 {
     setStyleSheet("");
     if ( wall ) setStyleSheet(PAINTED_LINE_STYLE);
 }
 
-void CellLine::mousePressEvent(QMouseEvent *event)
-{
-    wall = ! wall;
-}
 
-bool CellLine::setWall(bool w)
+bool CellLineDevices::setWall(bool w)
 {
     wall = w;
     return wall;
 }
 
-CellVLine::CellVLine(QWidget *parent):CellLine(parent)
+CellVLineDevices::CellVLineDevices(QWidget *parent):CellLineDevices(parent)
 {
     setFrameShape(QFrame::VLine);
 }
 
-CellHLine::CellHLine(QWidget *parent):CellLine(parent)
+CellHLineDevices::CellHLineDevices(QWidget *parent):CellLineDevices(parent)
 {
     setFrameShape(QFrame::HLine);
 }
 
-BuildingCell::BuildingCell(QGridLayout *layout, int row, int colown, int cell_type, QWidget *parent):QVBoxLayout(parent), type(cell_type)
+BuildingCellDevices::BuildingCellDevices(QGridLayout *layout, int row, int colown, int cell_type, QWidget *parent):QVBoxLayout(parent), type(cell_type)
 {
     layout->addLayout(this, row, colown);
 
     central_layout = new QHBoxLayout;
-    left_line      = new CellVLine;
-    right_line     = new CellVLine;
-    top_line       = new CellHLine;
-    bottom_line    = new CellHLine;
+    left_line      = new CellVLineDevices;
+    right_line     = new CellVLineDevices;
+    top_line       = new CellHLineDevices;
+    bottom_line    = new CellHLineDevices;
 
     central_layout->addWidget(left_line);
     central_layout->addStretch();
@@ -66,14 +51,14 @@ BuildingCell::BuildingCell(QGridLayout *layout, int row, int colown, int cell_ty
 }
 
 
-int BuildingCell::setType(int cell_type)
+int BuildingCellDevices::setType(int cell_type)
 {
     type = cell_type;
     changeType();
     return cell_type;
 }
 
-int BuildingCell::changeType()
+int BuildingCellDevices::changeType()
 {
     switch (type)
     {
@@ -97,7 +82,7 @@ int BuildingCell::changeType()
     return type;
 }
 
-void BuildingCell::setWalls(bool bottom_wall, bool right_wall, bool left_wall, bool top_wall)
+void BuildingCellDevices::setWalls(bool bottom_wall, bool right_wall, bool left_wall, bool top_wall)
 {
     bottom_line->setWall(bottom_wall);
     right_line->setWall(right_wall);
@@ -105,7 +90,7 @@ void BuildingCell::setWalls(bool bottom_wall, bool right_wall, bool left_wall, b
     top_line->setWall(top_wall);
 }
 
-void BuildingCell::repaintLines()
+void BuildingCellDevices::repaintLines()
 {
     bottom_line->repaintLine();
     right_line->repaintLine();
@@ -113,7 +98,7 @@ void BuildingCell::repaintLines()
     top_line->repaintLine();
 }
 
-BuildingCell::~BuildingCell()
+BuildingCellDevices::~BuildingCellDevices()
 {
     delete central_layout;
     delete top_line;

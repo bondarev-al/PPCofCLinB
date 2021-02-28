@@ -6,18 +6,32 @@
 
 const QSize FLOORS_BUT_SIZE = QSize(35, 35);
 
-class FloorButton: public QPushButton
+class AFloorButton: public QPushButton
 {
     Q_OBJECT
-private:
+protected:
     int floor_number;
 public:
-    static int number_of_floors;
+//    static int number_of_floors;
     int getFloorNumber();
-    explicit FloorButton(QVBoxLayout *layout, QWidget *parent = nullptr);
-    ~FloorButton();
+    explicit AFloorButton(QVBoxLayout *layout, QWidget *parent = nullptr);
+    ~AFloorButton();
 };
 
+class FloorButton: public AFloorButton
+{
+    Q_OBJECT
+public:
+    static int number_of_floors;
+    explicit FloorButton(QVBoxLayout *layout, QWidget *parent = nullptr);
+};
 
+class FloorButtonDevices: public AFloorButton
+{
+    Q_OBJECT
+public:
+    static int number_of_floors;
+    explicit FloorButtonDevices(QVBoxLayout *layout, QWidget *parent = nullptr);
+};
 
 #endif // FLOORBUTTON_H

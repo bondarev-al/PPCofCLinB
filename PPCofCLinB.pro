@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     buildingcell.cpp \
+    buildingcelldevices.cpp \
     editbuildingwindow.cpp \
     editdevicesinbuldingwindow.cpp \
     floorbutton.cpp \
@@ -19,6 +20,7 @@ SOURCES += \
 
 HEADERS += \
     buildingcell.h \
+    buildingcelldevices.h \
     editbuildingwindow.h \
     editdevicesinbuldingwindow.h \
     floorbutton.h \
