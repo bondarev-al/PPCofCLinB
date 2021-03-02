@@ -24,6 +24,7 @@ public:
     void showFloor(int floor_num);
     void changeFloorLabel();
     void setupMenu();
+    void saveFloorDevices();
 
 signals:
     void hidden();
@@ -54,6 +55,7 @@ private:
     QString fileName;
     std::vector<FloorButtonDevices *>                     floors_but_vec;
     std::vector<std::vector<std::vector<Walls>>>          floors_walls;
+    std::vector<std::vector<std::vector<int>>>            floors_devices;
     std::vector<std::vector<BuildingCellDevices *>>       cell_vector;
 };
 

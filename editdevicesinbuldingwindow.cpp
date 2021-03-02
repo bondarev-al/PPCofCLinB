@@ -58,6 +58,7 @@ void EditDevicesInBuldingWindow::showFloor(int floor_num)
                                         floors_walls[floor_number][i][j].left_wall,
                                         floors_walls[floor_number][i][j].top_wall);
             cell_vector[i][j]->repaintLines();
+            cell_vector[i][j]->setDeviceType(floors_devices[floor_number][i][j]);
         }
     changeFloorLabel();
 }
@@ -81,8 +82,20 @@ void EditDevicesInBuldingWindow::setupMenu()
     ui->menu_layout->addWidget(menu_bar);
 }
 
+void EditDevicesInBuldingWindow::saveFloorDevices()
+{
+    floors_devices[floor_number].clear();
+    for (int i = 0; i < height_floor; i++)
+    {
+        floors_devices[floor_number].push_back(std::vector<int>());
+        for (int j = 0; j < width_floor ; j++)
+            floors_devices[floor_number][i].push_back(cell_vector[i][j]->getDeviceType());
+    }
+}
+
 void EditDevicesInBuldingWindow::on_floor_but_clicked()
 {
+    saveFloorDevices();
     showFloor(static_cast<FloorButtonDevices *>(sender())->getFloorNumber());
 }
 
@@ -105,12 +118,14 @@ void EditDevicesInBuldingWindow::on_openBuildingAct_triggered()
             {
                 floors_but_vec.push_back(new FloorButtonDevices(ui->floors_but_layout, ui->floors_frame));
                 floors_walls.push_back(std::vector<std::vector<Walls>>());
+                floors_devices.push_back(std::vector<std::vector<int>>());
                 connect(floors_but_vec.back(), SIGNAL(clicked()), this, SLOT(on_floor_but_clicked()));
             }
         else while ( FloorButtonDevices::number_of_floors > num )
             {
                 FloorButtonDevices::number_of_floors--;
                 floors_walls.pop_back();
+                floors_devices.pop_back();
                 QLayoutItem* item = ui->floors_but_layout->takeAt(FloorButtonDevices::number_of_floors);
                 delete item->widget();
                 delete item;
@@ -120,14 +135,17 @@ void EditDevicesInBuldingWindow::on_openBuildingAct_triggered()
         for (int floor = 0; floor < FloorButtonDevices::number_of_floors ; floor++)
         {
             floors_walls[floor].clear();
+            floors_devices[floor].clear();
             for (int i = 0; i < height_floor; i++)
             {
                 floors_walls[floor].push_back(std::vector<Walls>());
+                floors_devices[floor].push_back(std::vector<int>());
                 for (int j = 0; j < width_floor ; j++)
                 {
                     Walls walls;
                     file.read((char *)&walls, sizeof(Walls));
                     floors_walls[floor][i].push_back(walls);
+                    floors_devices[floor][i].push_back(EMPTY);
                 }
             }
         }
