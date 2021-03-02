@@ -144,7 +144,6 @@ void EditBuildingWindow::on_openAct_triggered()
             {
                 floors_but_vec.push_back(new FloorButton(ui->floors_but_layout, ui->floors_frame));
                 floors_walls.push_back(std::vector<std::vector<Walls>>());
-                putEmptyFloorWalls(floors_but_vec.back()->getFloorNumber());
                 connect(floors_but_vec.back(), SIGNAL(clicked()), this, SLOT(on_floor_but_clicked()));
             }
         else while ( FloorButton::number_of_floors > num )

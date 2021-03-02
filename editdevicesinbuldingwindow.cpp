@@ -76,10 +76,19 @@ void EditDevicesInBuldingWindow::setupMenu()
     menu     = new QMenu("Действия");
     menu_bar->addMenu(menu);
     QAction *openBuildingAct   = menu->addAction("Открыть план здания");
+    menu->addSeparator();
+    QAction *openAct     = menu->addAction("Открыть файл");
+             saveAct     = menu->addAction("Сохранить файл");
+             saveAsAct   = menu->addAction("Сохранить как...");
 
     connect(openBuildingAct,     SIGNAL(triggered()), this, SLOT(on_openBuildingAct_triggered()));
+    connect(saveAct,     SIGNAL(triggered()), this, SLOT(on_saveAct_triggered()));
+    connect(saveAsAct,   SIGNAL(triggered()), this, SLOT(on_saveAsAct_triggered()));
+    connect(openAct,     SIGNAL(triggered()), this, SLOT(on_openAct_triggered()));
 
     ui->menu_layout->addWidget(menu_bar);
+    saveAct->setEnabled(false);
+    saveAsAct->setEnabled(false);
 }
 
 void EditDevicesInBuldingWindow::saveFloorDevices()
@@ -104,8 +113,7 @@ void EditDevicesInBuldingWindow::on_openBuildingAct_triggered()
     QString name = QFileDialog::getOpenFileName(0, "Открытие плана здания", "", "*.bld");
     if (name != "")
     {
-        fileName = name;
-        QFile file(fileName);
+        QFile file(name);
         int h, w, num;
         file.open(QIODevice::ReadOnly);
         file.read((char *)&h, sizeof(h));
@@ -150,7 +158,103 @@ void EditDevicesInBuldingWindow::on_openBuildingAct_triggered()
             }
         }
         showFloor(0);
+        saveAsAct->setEnabled(true);
+        saveAct->setEnabled(false);
         file.close();
+    }
+}
+
+void EditDevicesInBuldingWindow::on_openAct_triggered()
+{
+    QString name = QFileDialog::getOpenFileName(0, "Открытие файла устройств здания", "", "*.dev");
+    if (name != "")
+    {
+        fileName = name;
+        QFile file(fileName);
+        int h, w, num;
+        file.open(QIODevice::ReadOnly);
+        file.read((char *)&h, sizeof(h));
+        file.read((char *)&w, sizeof(w));
+        file.read((char *)&num, sizeof(num));
+
+        setSize(h, w);
+        if (num >= FloorButtonDevices::number_of_floors)
+            for (int i = FloorButtonDevices::number_of_floors; i < num ;  i++)
+            {
+                floors_but_vec.push_back(new FloorButtonDevices(ui->floors_but_layout, ui->floors_frame));
+                floors_walls.push_back(std::vector<std::vector<Walls>>());
+                floors_devices.push_back(std::vector<std::vector<int>>());
+                connect(floors_but_vec.back(), SIGNAL(clicked()), this, SLOT(on_floor_but_clicked()));
+            }
+        else while ( FloorButtonDevices::number_of_floors > num )
+            {
+                FloorButtonDevices::number_of_floors--;
+                floors_walls.pop_back();
+                floors_devices.pop_back();
+                QLayoutItem* item = ui->floors_but_layout->takeAt(FloorButtonDevices::number_of_floors);
+                delete item->widget();
+                delete item;
+                floors_but_vec.pop_back();
+            }
+
+        for (int floor = 0; floor < FloorButtonDevices::number_of_floors ; floor++)
+        {
+            floors_walls[floor].clear();
+            floors_devices[floor].clear();
+            for (int i = 0; i < height_floor; i++)
+            {
+                floors_walls[floor].push_back(std::vector<Walls>());
+                floors_devices[floor].push_back(std::vector<int>());
+                for (int j = 0; j < width_floor ; j++)
+                {
+                    Walls walls;
+                    int   type;
+                    file.read((char *)&walls, sizeof(Walls));
+                    file.read((char *)&type, sizeof(int));
+                    floors_walls[floor][i].push_back(walls);
+                    floors_devices[floor][i].push_back(type);
+                }
+            }
+        }
+        showFloor(0);
+        saveAct->setEnabled(true);
+        saveAsAct->setEnabled(true);
+        file.close();
+    }
+}
+
+void EditDevicesInBuldingWindow::on_saveAct_triggered()
+{
+    if (fileName != "")
+    {
+        QFile file(fileName);
+        file.open(QIODevice::WriteOnly);
+
+        file.write((char *)&height_floor, sizeof(height_floor));
+        file.write((char *)&width_floor, sizeof(height_floor));
+        file.write((char *)&FloorButtonDevices::number_of_floors, sizeof(FloorButtonDevices::number_of_floors));
+
+        saveFloorDevices();
+
+        for (int floor = 0; floor < FloorButtonDevices::number_of_floors ; floor++)
+            for (int i = 0; i < height_floor; i++)
+                for (int j = 0; j < width_floor ; j++)
+                {
+                    file.write((char *)&floors_walls[floor][i][j], sizeof(Walls));
+                    file.write((char *)&floors_devices[floor][i][j], sizeof(int));
+                }
+        saveAct->setEnabled(true);
+        file.close();
+    }
+}
+
+void EditDevicesInBuldingWindow::on_saveAsAct_triggered()
+{
+    QString name = QFileDialog::getSaveFileName(0, "Сохранить файл", "", "*.dev");
+    if (name != "")
+    {
+        fileName = name;
+        on_saveAct_triggered();
     }
 }
 

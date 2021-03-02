@@ -38,6 +38,12 @@ private slots:
 
     void on_openBuildingAct_triggered();
 
+    void on_openAct_triggered();
+
+    void on_saveAct_triggered();
+
+    void on_saveAsAct_triggered();
+
     void on_devices_PC_but_clicked(bool checked);
 
     void on_devices_switch_but_clicked(bool checked);
@@ -48,6 +54,8 @@ private:
     Ui::EditDevicesInBuldingWindow *ui;
     QMenuBar *menu_bar;
     QMenu    *menu;
+    QAction  *saveAct;
+    QAction  *saveAsAct;
     int width_floor;
     int height_floor;
     int floor_number;
