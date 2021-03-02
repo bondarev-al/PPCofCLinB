@@ -148,11 +148,8 @@ BuildingCellDevices::BuildingCellDevices(QGridLayout *layout, int row, int colow
     right_line     = new CellVLineWithoutMouse;
     top_line       = new CellHLineWithoutMouse;
     bottom_line    = new CellHLineWithoutMouse;
-    device_icon    = new QLabel;
-
-    device_icon->setCursor(Qt::PointingHandCursor);
-    QPixmap icon(":/icons/empty.png");
-    device_icon->setPixmap(icon.scaledToHeight(25));
+    device_icon    = new DeviceIcon();
+    device_type    = EMPTY;
 
     central_layout->addWidget(left_line);
     central_layout->addStretch();
@@ -163,10 +160,56 @@ BuildingCellDevices::BuildingCellDevices(QGridLayout *layout, int row, int colow
     this->addLayout(central_layout);
     this->addWidget(bottom_line);
 
+    connect(device_icon, SIGNAL(mousePressed()), this, SLOT(on_icon_pressed()));
     changeType();
+}
+
+void BuildingCellDevices::on_icon_pressed()
+{
+    emit iconPressed();
+}
+
+void BuildingCellDevices::setDeviceType(int deviceType)
+{
+    device_type = deviceType;
+    switch (deviceType)
+    {
+        case EMPTY:
+            device_icon->setIcon(EMPTY_ICON);
+            break;
+        case PC:
+            device_icon->setIcon(PC_ICON);
+            break;
+        case SWITCH:
+            device_icon->setIcon(SWITCH_ICON);
+            break;
+    }
 }
 
 BuildingCellDevices::~BuildingCellDevices()
 {
     delete device_icon;
+}
+
+DeviceIcon::DeviceIcon(QWidget *parent):QLabel(parent)
+{
+    setCursor(Qt::PointingHandCursor);
+    setIcon(EMPTY_ICON);
+}
+
+DeviceIcon::DeviceIcon(const QString &fileName, QWidget *parent):QLabel(parent)
+{
+    setCursor(Qt::PointingHandCursor);
+    setIcon(fileName);
+}
+
+void DeviceIcon::setIcon(const QString &fileName)
+{
+    QPixmap icon(fileName);
+    setPixmap(icon.scaledToHeight(ICON_HEIGHT));
+}
+
+void DeviceIcon::mousePressEvent(QMouseEvent *event)
+{
+    emit mousePressed();
 }

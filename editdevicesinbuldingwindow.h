@@ -37,6 +37,12 @@ private slots:
 
     void on_openBuildingAct_triggered();
 
+    void on_devices_PC_but_clicked(bool checked);
+
+    void on_devices_switch_but_clicked(bool checked);
+
+    void on_cell_icon_pressed();
+
 private:
     Ui::EditDevicesInBuldingWindow *ui;
     QMenuBar *menu_bar;
@@ -44,6 +50,7 @@ private:
     int width_floor;
     int height_floor;
     int floor_number;
+    int type_of_device;
     QString fileName;
     std::vector<FloorButtonDevices *>                     floors_but_vec;
     std::vector<std::vector<std::vector<Walls>>>          floors_walls;

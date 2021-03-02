@@ -12,7 +12,14 @@ const int CELL_TYPE_TOP        = 1;
 const int CELL_TYPE_LEFT       = 2;
 const int CELL_TYPE_WITHOUT    = 3;
 const int CELL_LINE_WIDTH      = 1;
+const int ICON_HEIGHT          =25;
 const QString PAINTED_LINE_STYLE = "background-color: rgb(255, 0, 0);";
+const QString PC_ICON            = ":/icons/PC.png";
+const QString EMPTY_ICON         = ":/icons/empty.png";
+const QString SWITCH_ICON        = ":/icons/switch.png";
+const int EMPTY  = -1;
+const int PC     =  0;
+const int SWITCH =  1;
 
 struct Walls
 {
@@ -104,13 +111,33 @@ public:
     explicit BuildingCell(QGridLayout *layout, int row, int colown, int cell_type, QWidget *parent = nullptr);
 };
 
+class DeviceIcon: public QLabel
+{
+    Q_OBJECT
+signals:
+    void mousePressed();
+protected:
+    void mousePressEvent(QMouseEvent *event) override;
+public:
+    explicit DeviceIcon(const QString &fileName, QWidget *parent = nullptr);
+    explicit DeviceIcon(QWidget *parent = nullptr);
+    void setIcon(const QString &fileName);
+};
+
 class BuildingCellDevices: public ABuildingCell
 {
     Q_OBJECT
+signals:
+    void iconPressed();
+private slots:
+    void on_icon_pressed();
 protected:
-    QLabel *device_icon;
+    int device_type;
+    DeviceIcon *device_icon;
 public:
     explicit BuildingCellDevices(QGridLayout *layout, int row, int colown, int cell_type, QWidget *parent = nullptr);
+    void setDeviceType(int deviceType);
+    int  getDeviceType(){return device_type;}
     ~BuildingCellDevices();
 };
 

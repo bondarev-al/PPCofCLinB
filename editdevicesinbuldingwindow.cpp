@@ -7,6 +7,7 @@ EditDevicesInBuldingWindow::EditDevicesInBuldingWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setupMenu();
+    type_of_device = EMPTY;
 }
 
 EditDevicesInBuldingWindow::~EditDevicesInBuldingWindow()
@@ -40,6 +41,9 @@ bool EditDevicesInBuldingWindow::setSize(int height, int width)
         cell_vector[i].push_back(new BuildingCellDevices(ui->edit_building_layout, i, 0, CELL_TYPE_LEFT));
         for (int j = 1; j < width_floor ; j++)  cell_vector[i].push_back(new BuildingCellDevices(ui->edit_building_layout, i, j, CELL_TYPE_WITHOUT));
     }
+    for (int i = 0; i < height_floor ; i++)
+        for (int j = 0; j < width_floor ; j++)
+            connect(cell_vector[i][j], SIGNAL(iconPressed()),this, SLOT(on_cell_icon_pressed()));
     return true;
 }
 
@@ -101,7 +105,6 @@ void EditDevicesInBuldingWindow::on_openBuildingAct_triggered()
             {
                 floors_but_vec.push_back(new FloorButtonDevices(ui->floors_but_layout, ui->floors_frame));
                 floors_walls.push_back(std::vector<std::vector<Walls>>());
-//                putEmptyFloorWalls(floors_but_vec.back()->getFloorNumber());
                 connect(floors_but_vec.back(), SIGNAL(clicked()), this, SLOT(on_floor_but_clicked()));
             }
         else while ( FloorButtonDevices::number_of_floors > num )
@@ -130,5 +133,42 @@ void EditDevicesInBuldingWindow::on_openBuildingAct_triggered()
         }
         showFloor(0);
         file.close();
+    }
+}
+
+void EditDevicesInBuldingWindow::on_devices_PC_but_clicked(bool checked)
+{
+    if (checked)
+    {
+        type_of_device = PC;
+        ui->devices_switch_but->setChecked(false);
+    }
+    else type_of_device = EMPTY;
+}
+
+void EditDevicesInBuldingWindow::on_devices_switch_but_clicked(bool checked)
+{
+    if (checked)
+    {
+        type_of_device = SWITCH;
+        ui->devices_PC_but->setChecked(false);
+    }
+    else type_of_device = EMPTY;
+}
+
+void EditDevicesInBuldingWindow::on_cell_icon_pressed()
+{
+    BuildingCellDevices * cell = static_cast<BuildingCellDevices *>(sender());
+    switch (type_of_device)
+    {
+        case EMPTY:
+            cell->setDeviceType(EMPTY);
+            break;
+        case PC:
+            cell->setDeviceType(PC);
+            break;
+        case SWITCH:
+            cell->setDeviceType(SWITCH);
+            break;
     }
 }
