@@ -4,6 +4,8 @@
 #include <QBoxLayout>
 #include <QFrame>
 #include <QSpacerItem>
+#include <QLabel>
+#include <QPicture>
 
 const int CELL_TYPE_FULL       = 0;
 const int CELL_TYPE_TOP        = 1;
@@ -105,8 +107,11 @@ public:
 class BuildingCellDevices: public ABuildingCell
 {
     Q_OBJECT
+protected:
+    QLabel *device_icon;
 public:
     explicit BuildingCellDevices(QGridLayout *layout, int row, int colown, int cell_type, QWidget *parent = nullptr);
+    ~BuildingCellDevices();
 };
 
 #endif // BUILDINGCELL_H

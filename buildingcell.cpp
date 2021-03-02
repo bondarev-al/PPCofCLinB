@@ -148,8 +148,15 @@ BuildingCellDevices::BuildingCellDevices(QGridLayout *layout, int row, int colow
     right_line     = new CellVLineWithoutMouse;
     top_line       = new CellHLineWithoutMouse;
     bottom_line    = new CellHLineWithoutMouse;
+    device_icon    = new QLabel;
+
+    device_icon->setCursor(Qt::PointingHandCursor);
+    QPixmap icon(":/icons/empty.png");
+    device_icon->setPixmap(icon.scaledToHeight(25));
 
     central_layout->addWidget(left_line);
+    central_layout->addStretch();
+    central_layout->addWidget(device_icon);
     central_layout->addStretch();
     central_layout->addWidget(right_line);
     this->addWidget(top_line);
@@ -157,4 +164,9 @@ BuildingCellDevices::BuildingCellDevices(QGridLayout *layout, int row, int colow
     this->addWidget(bottom_line);
 
     changeType();
+}
+
+BuildingCellDevices::~BuildingCellDevices()
+{
+    delete device_icon;
 }

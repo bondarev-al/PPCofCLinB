@@ -2,5 +2,6 @@
 <qresource>
     <file>icons/PC.png</file>
     <file>icons/switch.png</file>
+    <file>icons/empty.png</file>
 </qresource>
 </RCC>
