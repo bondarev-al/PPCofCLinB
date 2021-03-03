@@ -7,12 +7,12 @@
 #include <QLabel>
 #include <QPicture>
 
-const int CELL_TYPE_FULL       = 0;
-const int CELL_TYPE_TOP        = 1;
-const int CELL_TYPE_LEFT       = 2;
-const int CELL_TYPE_WITHOUT    = 3;
-const int CELL_LINE_WIDTH      = 1;
-const int ICON_HEIGHT          =25;
+const int CELL_TYPE_FULL       =  0;
+const int CELL_TYPE_TOP        =  1;
+const int CELL_TYPE_LEFT       =  2;
+const int CELL_TYPE_WITHOUT    =  3;
+const int CELL_LINE_WIDTH      =  1;
+const int ICON_HEIGHT          = 25;
 const QString PAINTED_LINE_STYLE = "background-color: rgb(255, 0, 0);";
 const QString PC_ICON            = ":/icons/PC.png";
 const QString EMPTY_ICON         = ":/icons/empty.png";
