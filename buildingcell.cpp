@@ -213,3 +213,60 @@ void DeviceIcon::mousePressEvent(QMouseEvent *event)
 {
     emit mousePressed();
 }
+
+ACellCable::ACellCable(QWidget *parent):QFrame(parent)
+{
+    setFrameShadow(QFrame::Raised);
+    setLineWidth(CELL_LINE_WIDTH);
+    setStyleSheet("background-color: rgb(0, 255, 0);");
+}
+
+CellHCable::CellHCable(QWidget *parent):ACellCable(parent)
+{
+    setFrameShape(QFrame::HLine);
+}
+
+CellVCable::CellVCable(QWidget *parent):ACellCable(parent)
+{
+    setFrameShape(QFrame::VLine);
+}
+
+BuildingCellPlanning::BuildingCellPlanning(QGridLayout *layout, int row, int colown, int cell_type, int dev_type, QWidget *parent):
+    ABuildingCell(layout, row, colown, cell_type, parent)
+{
+    left_line      = new CellVLineWithoutMouse;
+    right_line     = new CellVLineWithoutMouse;
+    top_line       = new CellHLineWithoutMouse;
+    bottom_line    = new CellHLineWithoutMouse;
+//    device_icon    = new DeviceIcon();
+    device_type    = dev_type;
+
+    central_layout->addWidget(left_line);
+    if (device_type != EMPTY)
+    {
+        switch (device_type)
+        {
+            case PC:
+                device_icon->setIcon(PC_ICON);
+                break;
+            case SWITCH:
+                device_icon->setIcon(SWITCH_ICON);
+                break;
+        }
+        central_layout->addStretch();
+        central_layout->addWidget(device_icon);
+        central_layout->addStretch();
+    }
+    else
+    {
+    //добавить сюда создание кабелей
+    }
+
+    central_layout->addWidget(right_line);
+    this->addWidget(top_line);
+    this->addLayout(central_layout);
+    this->addWidget(bottom_line);
+
+    changeType();
+}
+

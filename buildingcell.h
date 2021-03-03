@@ -141,4 +141,35 @@ public:
     ~BuildingCellDevices();
 };
 
+class ACellCable: public QFrame
+{
+    Q_OBJECT
+public:
+    explicit ACellCable(QWidget *parent = nullptr);
+};
+
+class CellHCable: public ACellCable
+{
+    Q_OBJECT
+public:
+    explicit CellHCable(QWidget *parent = nullptr);
+};
+
+class CellVCable: public ACellCable
+{
+    Q_OBJECT
+public:
+    explicit CellVCable(QWidget *parent = nullptr);
+};
+
+class BuildingCellPlanning: public ABuildingCell
+{
+    Q_OBJECT
+protected:
+    int device_type;
+    int inside_type;
+    DeviceIcon *device_icon;
+    explicit BuildingCellPlanning(QGridLayout *layout, int row, int colown, int cell_type, int dev_type = EMPTY, QWidget *parent = nullptr);
+};
+
 #endif // BUILDINGCELL_H
