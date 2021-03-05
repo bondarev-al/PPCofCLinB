@@ -4,7 +4,6 @@
 #include <QWidget>
 #include <vector>
 #include <QMenuBar>
-#include <QInputDialog>
 #include <QFileDialog>
 #include "floorbutton.h"
 #include "buildingcell.h"
@@ -30,7 +29,6 @@ signals:
     void hidden();
 
 private slots:
-
 
     void on_menu_but_clicked(bool checked);
 

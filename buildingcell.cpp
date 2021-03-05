@@ -172,18 +172,7 @@ void BuildingCellDevices::on_icon_pressed()
 void BuildingCellDevices::setDeviceType(int deviceType)
 {
     device_type = deviceType;
-    switch (deviceType)
-    {
-        case EMPTY:
-            device_icon->setIcon(EMPTY_ICON);
-            break;
-        case PC:
-            device_icon->setIcon(PC_ICON);
-            break;
-        case SWITCH:
-            device_icon->setIcon(SWITCH_ICON);
-            break;
-    }
+    device_icon->setIcon(deviceType);
 }
 
 BuildingCellDevices::~BuildingCellDevices()
@@ -191,15 +180,15 @@ BuildingCellDevices::~BuildingCellDevices()
     delete device_icon;
 }
 
-DeviceIcon::DeviceIcon(QWidget *parent):QLabel(parent)
+DeviceIcon::DeviceIcon(Qt::CursorShape cursor_shape, QWidget *parent):QLabel(parent)
 {
-    setCursor(Qt::PointingHandCursor);
+    setCursor(cursor_shape);
     setIcon(EMPTY_ICON);
 }
 
-DeviceIcon::DeviceIcon(const QString &fileName, QWidget *parent):QLabel(parent)
+DeviceIcon::DeviceIcon(const QString &fileName, Qt::CursorShape cursor_shape, QWidget *parent):QLabel(parent)
 {
-    setCursor(Qt::PointingHandCursor);
+    setCursor(cursor_shape);
     setIcon(fileName);
 }
 
@@ -207,6 +196,22 @@ void DeviceIcon::setIcon(const QString &fileName)
 {
     QPixmap icon(fileName);
     setPixmap(icon.scaledToHeight(ICON_HEIGHT));
+}
+
+void DeviceIcon::setIcon(int device_type)
+{
+    switch (device_type)
+    {
+        case EMPTY:
+            setIcon(EMPTY_ICON);
+            break;
+        case PC:
+            setIcon(PC_ICON);
+            break;
+        case SWITCH:
+            setIcon(SWITCH_ICON);
+            break;
+    }
 }
 
 void DeviceIcon::mousePressEvent(QMouseEvent *event)
@@ -238,28 +243,19 @@ BuildingCellPlanning::BuildingCellPlanning(QGridLayout *layout, int row, int col
     right_line     = new CellVLineWithoutMouse;
     top_line       = new CellHLineWithoutMouse;
     bottom_line    = new CellHLineWithoutMouse;
-//    device_icon    = new DeviceIcon();
     device_type    = dev_type;
 
     central_layout->addWidget(left_line);
+    inside_layout = new QHBoxLayout;
+    central_layout->addLayout(inside_layout);
+    inside_layout->addStretch();
+
     if (device_type != EMPTY)
     {
-        switch (device_type)
-        {
-            case PC:
-                device_icon->setIcon(PC_ICON);
-                break;
-            case SWITCH:
-                device_icon->setIcon(SWITCH_ICON);
-                break;
-        }
-        central_layout->addStretch();
-        central_layout->addWidget(device_icon);
-        central_layout->addStretch();
-    }
-    else
-    {
-    //добавить сюда создание кабелей
+        device_icon = new DeviceIcon(Qt::ArrowCursor);
+        device_icon->setIcon(device_type);
+        inside_layout->addWidget(device_icon);
+        inside_layout->addStretch();
     }
 
     central_layout->addWidget(right_line);
@@ -270,3 +266,26 @@ BuildingCellPlanning::BuildingCellPlanning(QGridLayout *layout, int row, int col
     changeType();
 }
 
+void BuildingCellPlanning::setDeviceType(int deviceType)
+{
+    device_type = deviceType;
+    while (QLayoutItem* item = inside_layout->takeAt(0))
+    {
+        delete item->widget();
+        delete item;
+    }
+    if (device_type != EMPTY)
+    {
+        device_icon = new DeviceIcon(Qt::ArrowCursor);
+        device_icon->setIcon(device_type);
+        inside_layout->addStretch();
+        inside_layout->addWidget(device_icon);
+        inside_layout->addStretch();
+    }
+    else inside_layout->addStretch();
+}
+
+BuildingCellPlanning::~BuildingCellPlanning()
+{
+    if (device_type != EMPTY) delete device_icon;
+}

@@ -34,4 +34,12 @@ public:
     explicit FloorButtonDevices(QVBoxLayout *layout, QWidget *parent = nullptr);
 };
 
+class FloorButtonPlanning: public AFloorButton
+{
+    Q_OBJECT
+public:
+    static int number_of_floors;
+    explicit FloorButtonPlanning(QVBoxLayout *layout, QWidget *parent = nullptr);
+};
+
 #endif // FLOORBUTTON_H

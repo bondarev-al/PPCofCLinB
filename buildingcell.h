@@ -119,9 +119,10 @@ signals:
 protected:
     void mousePressEvent(QMouseEvent *event) override;
 public:
-    explicit DeviceIcon(const QString &fileName, QWidget *parent = nullptr);
-    explicit DeviceIcon(QWidget *parent = nullptr);
+    explicit DeviceIcon(const QString &fileName, Qt::CursorShape cursor_shape = Qt::PointingHandCursor,  QWidget *parent = nullptr);
+    explicit DeviceIcon(Qt::CursorShape cursor_shape = Qt::PointingHandCursor, QWidget *parent = nullptr);
     void setIcon(const QString &fileName);
+    void setIcon(int device_type);
 };
 
 class BuildingCellDevices: public ABuildingCell
@@ -168,8 +169,13 @@ class BuildingCellPlanning: public ABuildingCell
 protected:
     int device_type;
     int inside_type;
+    QBoxLayout *inside_layout;
     DeviceIcon *device_icon;
+public:
     explicit BuildingCellPlanning(QGridLayout *layout, int row, int colown, int cell_type, int dev_type = EMPTY, QWidget *parent = nullptr);
+    void setDeviceType(int deviceType);
+    int  getDeviceType(){return device_type;}
+    ~BuildingCellPlanning();
 };
 
 #endif // BUILDINGCELL_H
