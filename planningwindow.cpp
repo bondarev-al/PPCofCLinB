@@ -77,6 +77,7 @@ void PlanningWindow::on_openBuildingAct_triggered()
             }
         }
         showFloor(0);
+        ui->planning_but->setEnabled(true);
         file.close();
     }
 }
