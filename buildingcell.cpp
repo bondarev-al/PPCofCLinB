@@ -236,6 +236,14 @@ CellVCable::CellVCable(QWidget *parent):ACellCable(parent)
     setFrameShape(QFrame::VLine);
 }
 
+//Cables::Cables()
+//{
+//    top_cable    = false;
+//    bottom_cable = false;
+//    right_cable  = false;
+//    left_cable   = false;
+//}
+
 BuildingCellPlanning::BuildingCellPlanning(QGridLayout *layout, int row, int colown, int cell_type, int dev_type, QWidget *parent):
     ABuildingCell(layout, row, colown, cell_type, parent)
 {
@@ -245,9 +253,18 @@ BuildingCellPlanning::BuildingCellPlanning(QGridLayout *layout, int row, int col
     bottom_line    = new CellHLineWithoutMouse;
     device_type    = dev_type;
 
+    cables.bottom_cable = false;
+    cables.top_cable    = false;
+    cables.left_cable   = false;
+    cables.right_cable  = false;
+
     central_layout->addWidget(left_line);
     inside_layout = new QHBoxLayout;
-    central_layout->addLayout(inside_layout);
+    inside_vlayout = new QVBoxLayout;
+    central_layout->addLayout(inside_vlayout);
+    inside_vlayout->addStretch();
+    inside_vlayout->addLayout(inside_layout);
+    inside_vlayout->addStretch();
     inside_layout->addStretch();
 
     if (device_type != EMPTY)
@@ -283,6 +300,45 @@ void BuildingCellPlanning::setDeviceType(int deviceType)
         inside_layout->addStretch();
     }
     else inside_layout->addStretch();
+}
+
+void BuildingCellPlanning::setCable(int cable_type)
+{
+    switch (cable_type)
+    {
+        case CABLE_TOP:
+            if (!cables.top_cable)
+            {
+                cables.top_cable = true;
+                inside_vlayout->insertWidget(0, new CellHCable);
+            }
+            break;
+        case CABLE_LEFT:
+            if (!cables.left_cable)
+            {
+                cables.left_cable = true;
+                central_layout->insertWidget(1, new CellVCable);
+            }
+            break;
+        case CABLE_BOTTOM:
+            if (!cables.bottom_cable)
+            {
+                cables.bottom_cable = true;
+                if (cables.top_cable)
+                    inside_vlayout->insertWidget(4, new CellHCable);
+                else inside_vlayout->insertWidget(3, new CellHCable);
+            }
+            break;
+        case CABLE_RIGHT:
+            if (!cables.right_cable)
+            {
+                cables.right_cable = true;
+                if (cables.left_cable)
+                    central_layout->insertWidget(3, new CellVCable);
+                else central_layout->insertWidget(2, new CellVCable);
+            }
+            break;
+    }
 }
 
 BuildingCellPlanning::~BuildingCellPlanning()

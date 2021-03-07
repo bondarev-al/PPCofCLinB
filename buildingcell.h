@@ -20,6 +20,10 @@ const QString SWITCH_ICON        = ":/icons/switch.png";
 const int EMPTY  = -1;
 const int PC     =  0;
 const int SWITCH =  1;
+const int CABLE_LEFT      = 1;
+const int CABLE_TOP       = 2;
+const int CABLE_RIGHT     = 3;
+const int CABLE_BOTTOM    = 4;
 
 struct Walls
 {
@@ -27,6 +31,15 @@ struct Walls
     bool right_wall;
     bool left_wall;
     bool top_wall;
+};
+
+struct Cables
+{
+    bool bottom_cable;
+    bool right_cable;
+    bool left_cable;
+    bool top_cable;
+//    Cables();
 };
 
 class CellLineWithoutMouse: public QFrame
@@ -168,13 +181,15 @@ class BuildingCellPlanning: public ABuildingCell
     Q_OBJECT
 protected:
     int device_type;
-    int inside_type;
     QBoxLayout *inside_layout;
     DeviceIcon *device_icon;
+    Cables cables;
+    QBoxLayout *inside_vlayout;
 public:
     explicit BuildingCellPlanning(QGridLayout *layout, int row, int colown, int cell_type, int dev_type = EMPTY, QWidget *parent = nullptr);
     void setDeviceType(int deviceType);
     int  getDeviceType(){return device_type;}
+    void setCable(int cable_type);
     ~BuildingCellPlanning();
 };
 
