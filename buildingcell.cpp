@@ -236,14 +236,6 @@ CellVCable::CellVCable(QWidget *parent):ACellCable(parent)
     setFrameShape(QFrame::VLine);
 }
 
-//Cables::Cables()
-//{
-//    top_cable    = false;
-//    bottom_cable = false;
-//    right_cable  = false;
-//    left_cable   = false;
-//}
-
 BuildingCellPlanning::BuildingCellPlanning(QGridLayout *layout, int row, int colown, int cell_type, int dev_type, QWidget *parent):
     ABuildingCell(layout, row, colown, cell_type, parent)
 {
@@ -338,6 +330,39 @@ void BuildingCellPlanning::setCable(int cable_type)
                 else central_layout->insertWidget(2, new CellVCable);
             }
             break;
+    }
+}
+
+void BuildingCellPlanning::resetCables()
+{
+    QLayoutItem* item;
+    if (cables.top_cable)
+    {
+        item = inside_vlayout->takeAt(0);
+        delete item->widget();
+        delete item;
+        cables.top_cable = false;
+    }
+    if (cables.left_cable)
+    {
+        item = central_layout->takeAt(1);
+        delete item->widget();
+        delete item;
+        cables.left_cable = false;
+    }
+    if (cables.bottom_cable)
+    {
+        item = inside_vlayout->takeAt(3);
+        delete item->widget();
+        delete item;
+        cables.bottom_cable = false;
+    }
+    if (cables.right_cable)
+    {
+        item = central_layout->takeAt(2);
+        delete item->widget();
+        delete item;
+        cables.right_cable = false;
     }
 }
 

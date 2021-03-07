@@ -12,7 +12,6 @@ class AFloorButton: public QPushButton
 protected:
     int floor_number;
 public:
-//    static int number_of_floors;
     int getFloorNumber();
     explicit AFloorButton(QVBoxLayout *layout, QWidget *parent = nullptr);
     ~AFloorButton();

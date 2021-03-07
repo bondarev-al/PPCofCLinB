@@ -39,7 +39,6 @@ struct Cables
     bool right_cable;
     bool left_cable;
     bool top_cable;
-//    Cables();
 };
 
 class CellLineWithoutMouse: public QFrame
@@ -190,6 +189,7 @@ public:
     void setDeviceType(int deviceType);
     int  getDeviceType(){return device_type;}
     void setCable(int cable_type);
+    void resetCables();
     ~BuildingCellPlanning();
 };
 
