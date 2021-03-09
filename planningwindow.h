@@ -23,6 +23,8 @@ public:
     bool setSize(int height, int width);
     void showFloor(int floor_num);
     void changeFloorLabel();
+    void analyzeDevices();
+    void analyzeWalls();
 
 signals:
     void hidden();
@@ -35,6 +37,8 @@ private slots:
 
     void on_openBuildingAct_triggered();
 
+    void on_planning_but_clicked();
+
 private:
     Ui::PlanningWindow *ui;
     QMenuBar *menu_bar;
@@ -46,6 +50,8 @@ private:
     std::vector<std::vector<std::vector<Walls>>>          floors_walls;
     std::vector<std::vector<std::vector<int>>>            floors_devices;
     std::vector<std::vector<BuildingCellPlanning *>>      cell_vector;
+    std::vector<QPoint>                                   pcs_vector;
+    std::vector<QPoint>                                   switches_vector;
 };
 
 #endif // PLANNINGWINDOW_H

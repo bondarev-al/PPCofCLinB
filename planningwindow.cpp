@@ -137,3 +137,34 @@ void PlanningWindow::changeFloorLabel()
     string += QString::number(floor_number + 1);
     ui->floor_num_lab->setText(string);
 }
+
+void PlanningWindow::analyzeDevices()
+{
+    pcs_vector.clear();
+    switches_vector.clear();
+    for (int i = 0; i < height_floor; i++)
+        for (int j = 0; j < width_floor; j++)
+            switch (floors_devices[floor_number][i][j])
+            {
+                case PC:
+                    pcs_vector.push_back(QPoint(i, j));
+                    break;
+                case SWITCH:
+                    switches_vector.push_back(QPoint(i, j));
+                    break;
+            }
+}
+
+void PlanningWindow::analyzeWalls()
+{
+
+}
+
+void PlanningWindow::on_planning_but_clicked()
+{
+    analyzeDevices();
+    if (!ui->along_walls_but->isChecked() && ui->through_walls_but->isChecked())
+    {
+
+    }
+}

@@ -101,6 +101,9 @@
            <property name="text">
             <string>Прокладывать вдоль стен</string>
            </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
           </widget>
          </item>
          <item>
