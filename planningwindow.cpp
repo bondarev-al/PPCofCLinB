@@ -184,6 +184,8 @@ int PlanningWindow::doPlanningNotAlongThrough()
     int number_of_pcs      = pcs_vector.size();
     int number_of_switches = switches_vector.size();
     int cable_quanity = 0;
+    int color_g = 255;
+    int color_b = 0;
     for (int i = 0; i < number_of_pcs ; i++)
     {
         QPoint pc = pcs_vector[i];
@@ -207,49 +209,56 @@ int PlanningWindow::doPlanningNotAlongThrough()
                 if (nearest_switch.y() > pc.y())
                 {
                     for (int j = pc.y() + 1; j <= nearest_switch.y() ; j++)
-                        cell_vector[pc.x()][j]->setCable(CABLE_TOP);
+                        cell_vector[pc.x()][j]->setCable(CABLE_TOP, 0, color_g, color_b);
                     for (int i = pc.x(); i < nearest_switch.x() ; i++)
-                         cell_vector[i][nearest_switch.y()]->setCable(CABLE_RIGHT);
+                         cell_vector[i][nearest_switch.y()]->setCable(CABLE_RIGHT, 0, color_g, color_b);
                 }
                 else if (nearest_switch.y() < pc.y())
                 {
                     for (int j = pc.y() - 1; j >= nearest_switch.y() ; j--)
-                        cell_vector[pc.x()][j]->setCable(CABLE_TOP);
+                        cell_vector[pc.x()][j]->setCable(CABLE_TOP, 0, color_g, color_b);
                     for (int i = pc.x(); i < nearest_switch.x() ; i++)
-                         cell_vector[i][nearest_switch.y()]->setCable(CABLE_LEFT);
+                         cell_vector[i][nearest_switch.y()]->setCable(CABLE_LEFT, 0, color_g, color_b);
                 }
                 else
                     for (int i = pc.x() + 1; i <= nearest_switch.x() ; i++)
-                         cell_vector[i][nearest_switch.y()]->setCable(CABLE_RIGHT);
+                         cell_vector[i][nearest_switch.y()]->setCable(CABLE_RIGHT, 0, color_g, color_b);
             }
             else if (nearest_switch.x() < pc.x())
             {
                 if (nearest_switch.y() > pc.y())
                 {
                     for (int j = pc.y() + 1; j <= nearest_switch.y() ; j++)
-                        cell_vector[pc.x()][j]->setCable(CABLE_BOTTOM);
+                        cell_vector[pc.x()][j]->setCable(CABLE_BOTTOM, 0, color_g, color_b);
                     for (int i = pc.x(); i > nearest_switch.x() ; i--)
-                         cell_vector[i][nearest_switch.y()]->setCable(CABLE_RIGHT);
+                         cell_vector[i][nearest_switch.y()]->setCable(CABLE_RIGHT, 0, color_g, color_b);
                 }
                 else if (nearest_switch.y() < pc.y())
                 {
                     for (int j = pc.y() - 1; j >= nearest_switch.y() ; j--)
-                        cell_vector[pc.x()][j]->setCable(CABLE_BOTTOM);
+                        cell_vector[pc.x()][j]->setCable(CABLE_BOTTOM, 0, color_g, color_b);
                     for (int i = pc.x(); i > nearest_switch.x() ; i--)
-                         cell_vector[i][nearest_switch.y()]->setCable(CABLE_LEFT);
+                         cell_vector[i][nearest_switch.y()]->setCable(CABLE_LEFT, 0, color_g, color_b);
                 }
                 else
                     for (int i = pc.x() - 1; i >= nearest_switch.x() ; i--)
-                         cell_vector[i][nearest_switch.y()]->setCable(CABLE_RIGHT);
+                         cell_vector[i][nearest_switch.y()]->setCable(CABLE_RIGHT, 0, color_g, color_b);
             }
             else
             {
                 if (nearest_switch.y() > pc.y())
                     for (int j = pc.y() + 1; j <= nearest_switch.y() ; j++)
-                        cell_vector[pc.x()][j]->setCable(CABLE_BOTTOM);
+                        cell_vector[pc.x()][j]->setCable(CABLE_BOTTOM, 0, color_g, color_b);
                 else
                     for (int j = pc.y() - 1; j >= nearest_switch.y() ; j--)
-                        cell_vector[pc.x()][j]->setCable(CABLE_BOTTOM);
+                        cell_vector[pc.x()][j]->setCable(CABLE_BOTTOM, 0, color_g, color_b);
+            }
+            if (color_g > 100) color_g -= 60;
+            else if (color_b < 200) color_b += 60;
+            else
+            {
+                color_g = 255;
+                color_b = 0;
             }
         }
     }

@@ -159,6 +159,8 @@ class ACellCable: public QFrame
     Q_OBJECT
 public:
     explicit ACellCable(QWidget *parent = nullptr);
+    explicit ACellCable(int r, int g, int b, QWidget *parent = nullptr);
+    void changeColor(int r, int g, int b);
 };
 
 class CellHCable: public ACellCable
@@ -166,6 +168,7 @@ class CellHCable: public ACellCable
     Q_OBJECT
 public:
     explicit CellHCable(QWidget *parent = nullptr);
+    explicit CellHCable(int r, int g, int b, QWidget *parent = nullptr);
 };
 
 class CellVCable: public ACellCable
@@ -173,6 +176,7 @@ class CellVCable: public ACellCable
     Q_OBJECT
 public:
     explicit CellVCable(QWidget *parent = nullptr);
+    explicit CellVCable(int r, int g, int b, QWidget *parent = nullptr);
 };
 
 class BuildingCellPlanning: public ABuildingCell
@@ -188,7 +192,7 @@ public:
     explicit BuildingCellPlanning(QGridLayout *layout, int row, int colown, int cell_type, int dev_type = EMPTY, QWidget *parent = nullptr);
     void setDeviceType(int deviceType);
     int  getDeviceType(){return device_type;}
-    void setCable(int cable_type);
+    void setCable(int cable_type, int r = 0, int g = 255, int b = 0);
     void resetCables();
     ~BuildingCellPlanning();
 };

@@ -226,12 +226,41 @@ ACellCable::ACellCable(QWidget *parent):QFrame(parent)
     setStyleSheet("background-color: rgb(0, 255, 0);");
 }
 
+ACellCable::ACellCable(int r, int g, int b, QWidget *parent):QFrame(parent)
+{
+    setFrameShadow(QFrame::Raised);
+    setLineWidth(CELL_LINE_WIDTH);
+    changeColor(r, g, b);
+}
+
+void ACellCable::changeColor(int r, int g, int b)
+{
+    QString string = "background-color: rgb(";
+    string += QString::number(r);
+    string += ", ";
+    string += QString::number(g);
+    string += ", ";
+    string += QString::number(b);
+    string += ");";
+    setStyleSheet(string);
+}
+
 CellHCable::CellHCable(QWidget *parent):ACellCable(parent)
 {
     setFrameShape(QFrame::HLine);
 }
 
+CellHCable::CellHCable(int r, int g, int b, QWidget *parent):ACellCable(r, g, b, parent)
+{
+    setFrameShape(QFrame::HLine);
+}
+
 CellVCable::CellVCable(QWidget *parent):ACellCable(parent)
+{
+    setFrameShape(QFrame::VLine);
+}
+
+CellVCable::CellVCable(int r, int g, int b, QWidget *parent):ACellCable(r, g, b, parent)
 {
     setFrameShape(QFrame::VLine);
 }
@@ -294,7 +323,7 @@ void BuildingCellPlanning::setDeviceType(int deviceType)
     else inside_layout->addStretch();
 }
 
-void BuildingCellPlanning::setCable(int cable_type)
+void BuildingCellPlanning::setCable(int cable_type, int r, int g, int b)
 {
     switch (cable_type)
     {
@@ -302,14 +331,14 @@ void BuildingCellPlanning::setCable(int cable_type)
             if (!cables.top_cable)
             {
                 cables.top_cable = true;
-                inside_vlayout->insertWidget(0, new CellHCable);
+                inside_vlayout->insertWidget(0, new CellHCable(r, g, b));
             }
             break;
         case CABLE_LEFT:
             if (!cables.left_cable)
             {
                 cables.left_cable = true;
-                central_layout->insertWidget(1, new CellVCable);
+                central_layout->insertWidget(1, new CellVCable(r, g, b));
             }
             break;
         case CABLE_BOTTOM:
@@ -317,8 +346,8 @@ void BuildingCellPlanning::setCable(int cable_type)
             {
                 cables.bottom_cable = true;
                 if (cables.top_cable)
-                    inside_vlayout->insertWidget(4, new CellHCable);
-                else inside_vlayout->insertWidget(3, new CellHCable);
+                    inside_vlayout->insertWidget(4, new CellHCable(r, g, b));
+                else inside_vlayout->insertWidget(3, new CellHCable(r, g, b));
             }
             break;
         case CABLE_RIGHT:
@@ -326,8 +355,8 @@ void BuildingCellPlanning::setCable(int cable_type)
             {
                 cables.right_cable = true;
                 if (cables.left_cable)
-                    central_layout->insertWidget(3, new CellVCable);
-                else central_layout->insertWidget(2, new CellVCable);
+                    central_layout->insertWidget(3, new CellVCable(r, g, b));
+                else central_layout->insertWidget(2, new CellVCable(r, g, b));
             }
             break;
     }
