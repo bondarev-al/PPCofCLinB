@@ -5,8 +5,11 @@
 #include <vector>
 #include <QMenuBar>
 #include <QFileDialog>
+#include <math.h>
 #include "floorbutton.h"
 #include "buildingcell.h"
+
+const int MAX_VALUE = 32767;
 
 namespace Ui {
 class PlanningWindow;
@@ -25,6 +28,7 @@ public:
     void changeFloorLabel();
     void analyzeDevices();
     void analyzeWalls();
+    void resetCables();
 
 signals:
     void hidden();
@@ -52,6 +56,7 @@ private:
     std::vector<std::vector<BuildingCellPlanning *>>      cell_vector;
     std::vector<QPoint>                                   pcs_vector;
     std::vector<QPoint>                                   switches_vector;
+    int doPlanningNotAlongThrough();
 };
 
 #endif // PLANNINGWINDOW_H
