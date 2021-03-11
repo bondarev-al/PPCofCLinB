@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Прокладка линий связи</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="PPCofCLinB.qrc">
+    <normaloff>:/icons/switch_program_icon.png</normaloff>:/icons/switch_program_icon.png</iconset>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
     <widget class="QFrame" name="frame">
@@ -151,6 +155,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="PPCofCLinB.qrc"/>
+ </resources>
  <connections/>
 </ui>

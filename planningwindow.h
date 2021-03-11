@@ -50,12 +50,14 @@ private:
     int width_floor;
     int height_floor;
     int floor_number;
-    std::vector<FloorButtonPlanning *>                    floors_but_vec;
-    std::vector<std::vector<std::vector<Walls>>>          floors_walls;
-    std::vector<std::vector<std::vector<int>>>            floors_devices;
-    std::vector<std::vector<BuildingCellPlanning *>>      cell_vector;
-    std::vector<QPoint>                                   pcs_vector;
-    std::vector<QPoint>                                   switches_vector;
+    std::vector<FloorButtonPlanning *>                 floors_but_vec;
+    std::vector<std::vector<std::vector<Walls>>>       floors_walls;
+    std::vector<std::vector<std::vector<int>>>         floors_devices;
+    std::vector<std::vector<BuildingCellPlanning *>>   cell_vector;
+    std::vector<QPoint>                                pcs_vector;
+    std::vector<QPoint>                                switches_vector;
+    std::vector<std::vector<Wall>>                     h_walls_vector;
+    std::vector<std::vector<Wall>>                     v_walls_vector;
     int doPlanningNotAlongThrough();
 };
 

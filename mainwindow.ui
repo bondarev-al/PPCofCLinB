@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>PPCofCLinB</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="PPCofCLinB.qrc">
+    <normaloff>:/icons/switch_program_icon.png</normaloff>:/icons/switch_program_icon.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
@@ -115,6 +119,8 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources/>
+ <resources>
+  <include location="PPCofCLinB.qrc"/>
+ </resources>
  <connections/>
 </ui>

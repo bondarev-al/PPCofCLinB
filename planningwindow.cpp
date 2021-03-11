@@ -165,7 +165,70 @@ void PlanningWindow::analyzeDevices()
 
 void PlanningWindow::analyzeWalls()
 {
+    v_walls_vector.clear();
+    h_walls_vector.clear();
+    for (int i = 0; i <= height_floor ; i++)
+        h_walls_vector.push_back(std::vector<Wall>());
+    for (int j = 0; j <=  width_floor ; j++)
+        v_walls_vector.push_back(std::vector<Wall>());
+    bool wall  = false;
+    int  beg   = -1;
 
+    for(int i = 0; i < height_floor ; i++)
+    {
+        wall  = cell_vector[i][0]->isLeftLineWall();
+        if (wall && (beg == -1)) beg = i;
+        else if (!wall && (beg != -1))
+        {
+            v_walls_vector[0].push_back(Wall(beg, i - 1));
+            beg = -1;
+        }
+    }
+    if (beg != -1) v_walls_vector[0].push_back(Wall(beg, height_floor - 1));
+    for (int j = 0; j < width_floor ; j++)
+    {
+        beg = -1;
+        wall = false;
+        for(int i = 0; i < height_floor ; i++)
+        {
+            wall  = cell_vector[i][j]->isRightLineWall();
+            if (wall && (beg == -1)) beg = i;
+            else if (!wall && (beg != -1))
+            {
+                v_walls_vector[j + 1].push_back(Wall(beg, i - 1));
+                beg = -1;
+            }
+        }
+        if (beg != -1) v_walls_vector[j + 1].push_back(Wall(beg, height_floor - 1));
+    }
+
+    for(int j = 0; j < width_floor ; j++)
+    {
+        wall  = cell_vector[0][j]->isTopLineWall();
+        if (wall && (beg == -1)) beg = j;
+        else if (!wall && (beg != -1))
+        {
+            h_walls_vector[0].push_back(Wall(beg, j - 1));
+            beg = -1;
+        }
+    }
+    if (beg != -1) h_walls_vector[0].push_back(Wall(beg, width_floor - 1));
+    for (int i = 0; i < height_floor ; i++)
+    {
+        beg = -1;
+        wall = false;
+        for(int j = 0; j < width_floor ; j++)
+        {
+            wall  = cell_vector[i][j]->isBottomLineWall();
+            if (wall && (beg == -1)) beg = j;
+            else if (!wall && (beg != -1))
+            {
+                h_walls_vector[i + 1].push_back(Wall(beg, j - 1));
+                beg = -1;
+            }
+        }
+        if (beg != -1) h_walls_vector[i + 1].push_back(Wall(beg, width_floor - 1));
+    }
 }
 
 void PlanningWindow::on_planning_but_clicked()
@@ -176,6 +239,10 @@ void PlanningWindow::on_planning_but_clicked()
     if (!ui->along_walls_but->isChecked() && ui->through_walls_but->isChecked())
     {
         cable_quanity = doPlanningNotAlongThrough();
+    }
+    else if (ui->along_walls_but->isChecked() && ui->through_walls_but->isChecked())
+    {
+        analyzeWalls();
     }
 }
 

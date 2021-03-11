@@ -197,4 +197,17 @@ public:
     ~BuildingCellPlanning();
 };
 
+class Wall
+{
+private:
+    int begin;
+    int end;
+public:
+    Wall(int beg, int ed):begin(beg), end(ed) { };
+    Wall() = delete;
+    int getLength() {return  abs(end - begin) + 1;}
+    int getBegin() {return begin;}
+    int getEnd()   {return end;}
+};
+
 #endif // BUILDINGCELL_H
