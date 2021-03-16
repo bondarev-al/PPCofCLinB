@@ -9,7 +9,7 @@
 #include "floorbutton.h"
 #include "buildingcell.h"
 
-const int MAX_VALUE = 32767;
+const int EMPTY_VALUE = 32767;
 
 namespace Ui {
 class PlanningWindow;
@@ -59,6 +59,9 @@ private:
     std::vector<std::vector<Wall>>                     h_walls_vector;
     std::vector<std::vector<Wall>>                     v_walls_vector;
     int doPlanningNotAlongThrough();
+    int doPlanningAlongThrough();
+    int findNearestSwitch(const QPoint &pc, QPoint &sw);
+    void findNearestWalls(const QPoint &pc, const QPoint &sw, Wall &nearest_wall_x, Wall &nearest_wall_y, int &nearest_wall_x_coord,int &nearest_wall_y_coord);
 };
 
 #endif // PLANNINGWINDOW_H

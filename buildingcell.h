@@ -208,6 +208,7 @@ public:
     int getLength() {return  abs(end - begin) + 1;}
     int getBegin() {return begin;}
     int getEnd()   {return end;}
+    bool between(int coord);
 };
 
 #endif // BUILDINGCELL_H

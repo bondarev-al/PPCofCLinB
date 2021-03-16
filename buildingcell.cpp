@@ -399,3 +399,9 @@ BuildingCellPlanning::~BuildingCellPlanning()
 {
     if (device_type != EMPTY) delete device_icon;
 }
+
+bool Wall::between(int coord)
+{
+    if ((coord >= begin) && (coord <= end)) return true;
+    return false;
+}
