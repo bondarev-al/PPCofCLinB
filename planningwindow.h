@@ -62,6 +62,8 @@ private:
     int doPlanningAlongThrough();
     int findNearestSwitch(const QPoint &pc, QPoint &sw);
     void findNearestWalls(const QPoint &pc, const QPoint &sw, Wall &nearest_wall_x, Wall &nearest_wall_y, int &nearest_wall_x_coord,int &nearest_wall_y_coord);
+    void showCableBetweenX(int x0, int x1, int y, int cable_type, int r = 0, int g = 255, int b = 0);
+    void showCableBetweenY(int y0, int y1, int x, int cable_type, int r = 0, int g = 255, int b = 0);
 };
 
 #endif // PLANNINGWINDOW_H

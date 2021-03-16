@@ -327,9 +327,36 @@ void PlanningWindow::findNearestWalls(const QPoint &pc, const QPoint &sw, Wall &
     }
 }
 
+void PlanningWindow::showCableBetweenX(int x0, int x1, int y, int cable_type, int r, int g, int b)
+{
+    if ((cable_type != CABLE_LEFT) && (cable_type != CABLE_RIGHT)) return;
+    if (x1 < x0)
+    {
+        int temp = x0;
+        x0 = x1;
+        x1 = temp;
+    }
+    for (int i = x0; i <= x1 ; i++)
+         cell_vector[i][y]->setCable(cable_type, r, g, b);
+}
+
+void PlanningWindow::showCableBetweenY(int y0, int y1, int x, int cable_type, int r, int g, int b)
+{
+    if ((cable_type != CABLE_TOP) && (cable_type != CABLE_BOTTOM)) return;
+    if (y1 < y0)
+    {
+        int temp = y0;
+        y0 = y1;
+        y1 = temp;
+    }
+    for (int j = y0; j <= y1 ; j++)
+         cell_vector[x][j]->setCable(cable_type, r, g, b);
+
+}
+
 int PlanningWindow::doPlanningNotAlongThrough()
 {
-    int number_of_pcs      = pcs_vector.size();
+    int number_of_pcs = pcs_vector.size();
     int cable_quanity = 0;
     int color_g = 255;
     int color_b = 0;
@@ -345,50 +372,38 @@ int PlanningWindow::doPlanningNotAlongThrough()
             {
                 if (nearest_switch.y() > pc.y())
                 {
-                    for (int j = pc.y() + 1; j <= nearest_switch.y() ; j++)
-                        cell_vector[pc.x()][j]->setCable(CABLE_TOP, 0, color_g, color_b);
-                    for (int i = pc.x(); i < nearest_switch.x() ; i++)
-                         cell_vector[i][nearest_switch.y()]->setCable(CABLE_RIGHT, 0, color_g, color_b);
+                    showCableBetweenY(pc.y() + 1, nearest_switch.y(), pc.x(), CABLE_TOP, 0, color_g, color_b);
+                    showCableBetweenX(pc.x(), nearest_switch.x() - 1, nearest_switch.y(), CABLE_RIGHT, 0, color_g, color_b);
                 }
                 else if (nearest_switch.y() < pc.y())
                 {
-                    for (int j = pc.y() - 1; j >= nearest_switch.y() ; j--)
-                        cell_vector[pc.x()][j]->setCable(CABLE_TOP, 0, color_g, color_b);
-                    for (int i = pc.x(); i < nearest_switch.x() ; i++)
-                         cell_vector[i][nearest_switch.y()]->setCable(CABLE_LEFT, 0, color_g, color_b);
+                    showCableBetweenY(pc.y() - 1, nearest_switch.y(), pc.x(), CABLE_TOP, 0, color_g, color_b);
+                    showCableBetweenX(pc.x(), nearest_switch.x() - 1, nearest_switch.y(), CABLE_LEFT, 0, color_g, color_b);
                 }
                 else
-                    for (int i = pc.x() + 1; i <= nearest_switch.x() ; i++)
-                         cell_vector[i][nearest_switch.y()]->setCable(CABLE_RIGHT, 0, color_g, color_b);
+                    showCableBetweenX(pc.x() + 1, nearest_switch.x(), nearest_switch.y(), CABLE_RIGHT, 0, color_g, color_b);
             }
             else if (nearest_switch.x() < pc.x())
             {
                 if (nearest_switch.y() > pc.y())
                 {
-                    for (int j = pc.y() + 1; j <= nearest_switch.y() ; j++)
-                        cell_vector[pc.x()][j]->setCable(CABLE_BOTTOM, 0, color_g, color_b);
-                    for (int i = pc.x(); i > nearest_switch.x() ; i--)
-                         cell_vector[i][nearest_switch.y()]->setCable(CABLE_RIGHT, 0, color_g, color_b);
+                    showCableBetweenY(pc.y() + 1, nearest_switch.y(), pc.x(), CABLE_BOTTOM, 0, color_g, color_b);
+                    showCableBetweenX(pc.x(), nearest_switch.x() + 1, nearest_switch.y(), CABLE_RIGHT, 0, color_g, color_b);
                 }
                 else if (nearest_switch.y() < pc.y())
                 {
-                    for (int j = pc.y() - 1; j >= nearest_switch.y() ; j--)
-                        cell_vector[pc.x()][j]->setCable(CABLE_BOTTOM, 0, color_g, color_b);
-                    for (int i = pc.x(); i > nearest_switch.x() ; i--)
-                         cell_vector[i][nearest_switch.y()]->setCable(CABLE_LEFT, 0, color_g, color_b);
+                    showCableBetweenY(pc.y() - 1, nearest_switch.y(), pc.x(), CABLE_BOTTOM, 0, color_g, color_b);
+                    showCableBetweenX(pc.x(), nearest_switch.x() + 1, nearest_switch.y(), CABLE_LEFT, 0, color_g, color_b);
                 }
                 else
-                    for (int i = pc.x() - 1; i >= nearest_switch.x() ; i--)
-                         cell_vector[i][nearest_switch.y()]->setCable(CABLE_RIGHT, 0, color_g, color_b);
+                    showCableBetweenX(pc.x() - 1, nearest_switch.x(), nearest_switch.y(), CABLE_RIGHT, 0, color_g, color_b);
             }
             else
             {
                 if (nearest_switch.y() > pc.y())
-                    for (int j = pc.y() + 1; j <= nearest_switch.y() ; j++)
-                        cell_vector[pc.x()][j]->setCable(CABLE_BOTTOM, 0, color_g, color_b);
+                    showCableBetweenY(pc.y() + 1, nearest_switch.y(), pc.x(), CABLE_BOTTOM, 0, color_g, color_b);
                 else
-                    for (int j = pc.y() - 1; j >= nearest_switch.y() ; j--)
-                        cell_vector[pc.x()][j]->setCable(CABLE_BOTTOM, 0, color_g, color_b);
+                    showCableBetweenY(pc.y() - 1, nearest_switch.y(), pc.x(), CABLE_BOTTOM, 0, color_g, color_b);
             }
             if (color_g > 100) color_g -= 60;
             else if (color_b < 200) color_b += 60;
@@ -404,7 +419,7 @@ int PlanningWindow::doPlanningNotAlongThrough()
 
 int PlanningWindow::doPlanningAlongThrough()
 {
-    int number_of_pcs      = pcs_vector.size();
+    int number_of_pcs = pcs_vector.size();
     int cable_quanity = 0;
     int color_g = 255;
     int color_b = 0;
