@@ -33,12 +33,23 @@ struct Walls
     bool top_wall;
 };
 
+struct Color
+{
+    int r;
+    int g;
+    int b;
+};
+
 struct Cables
 {
     bool bottom_cable;
     bool right_cable;
     bool left_cable;
     bool top_cable;
+    Color bottom_color;
+    Color right_color;
+    Color left_color;
+    Color top_color;
 };
 
 class CellLineWithoutMouse: public QFrame
@@ -193,6 +204,7 @@ public:
     void setDeviceType(int deviceType);
     int  getDeviceType(){return device_type;}
     void setCable(int cable_type, int r = 0, int g = 255, int b = 0);
+    Cables getCables() {return cables;};
     void resetCables();
     ~BuildingCellPlanning();
 };

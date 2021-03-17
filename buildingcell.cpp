@@ -332,6 +332,9 @@ void BuildingCellPlanning::setCable(int cable_type, int r, int g, int b)
             {
                 cables.top_cable = true;
                 inside_vlayout->insertWidget(0, new CellHCable(r, g, b));
+                cables.top_color.r = r;
+                cables.top_color.g = g;
+                cables.top_color.b = b;
             }
             break;
         case CABLE_LEFT:
@@ -339,12 +342,18 @@ void BuildingCellPlanning::setCable(int cable_type, int r, int g, int b)
             {
                 cables.left_cable = true;
                 central_layout->insertWidget(1, new CellVCable(r, g, b));
+                cables.left_color.r = r;
+                cables.left_color.g = g;
+                cables.left_color.b = b;
             }
             break;
         case CABLE_BOTTOM:
             if (!cables.bottom_cable)
             {
                 cables.bottom_cable = true;
+                cables.bottom_color.r = r;
+                cables.bottom_color.g = g;
+                cables.bottom_color.b = b;
                 if (cables.top_cable)
                     inside_vlayout->insertWidget(4, new CellHCable(r, g, b));
                 else inside_vlayout->insertWidget(3, new CellHCable(r, g, b));
@@ -354,6 +363,9 @@ void BuildingCellPlanning::setCable(int cable_type, int r, int g, int b)
             if (!cables.right_cable)
             {
                 cables.right_cable = true;
+                cables.right_color.r = r;
+                cables.right_color.g = g;
+                cables.right_color.b = b;
                 if (cables.left_cable)
                     central_layout->insertWidget(3, new CellVCable(r, g, b));
                 else central_layout->insertWidget(2, new CellVCable(r, g, b));

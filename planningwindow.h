@@ -29,6 +29,8 @@ public:
     void analyzeDevices();
     void analyzeWalls();
     void resetCables();
+    void saveFloorCables();
+    void putEmptyFloorCables(int floor_num);
 
 signals:
     void hidden();
@@ -52,6 +54,7 @@ private:
     int floor_number;
     std::vector<FloorButtonPlanning *>                 floors_but_vec;
     std::vector<std::vector<std::vector<Walls>>>       floors_walls;
+    std::vector<std::vector<std::vector<Cables>>>      floors_cables;
     std::vector<std::vector<std::vector<int>>>         floors_devices;
     std::vector<std::vector<BuildingCellPlanning *>>   cell_vector;
     std::vector<QPoint>                                pcs_vector;

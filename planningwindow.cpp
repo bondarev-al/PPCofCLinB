@@ -22,7 +22,8 @@ void PlanningWindow::on_menu_but_clicked(bool checked)
 
 void PlanningWindow:: on_floor_but_clicked()
 {
-    showFloor(static_cast<FloorButtonDevices *>(sender())->getFloorNumber());
+    saveFloorCables();
+    showFloor(static_cast<FloorButtonPlanning *>(sender())->getFloorNumber());
 }
 
 void PlanningWindow::on_openBuildingAct_triggered()
@@ -44,6 +45,7 @@ void PlanningWindow::on_openBuildingAct_triggered()
             {
                 floors_but_vec.push_back(new FloorButtonPlanning(ui->floors_but_layout, ui->floors_frame));
                 floors_walls.push_back(std::vector<std::vector<Walls>>());
+                floors_cables.push_back(std::vector<std::vector<Cables>>());
                 floors_devices.push_back(std::vector<std::vector<int>>());
                 connect(floors_but_vec.back(), SIGNAL(clicked()), this, SLOT(on_floor_but_clicked()));
             }
@@ -51,6 +53,7 @@ void PlanningWindow::on_openBuildingAct_triggered()
             {
                 FloorButtonPlanning::number_of_floors--;
                 floors_walls.pop_back();
+                floors_cables.pop_back();
                 floors_devices.pop_back();
                 QLayoutItem* item = ui->floors_but_layout->takeAt(FloorButtonPlanning::number_of_floors);
                 delete item->widget();
@@ -76,6 +79,11 @@ void PlanningWindow::on_openBuildingAct_triggered()
                     floors_devices[floor][i].push_back(type);
                 }
             }
+        }
+        for (int floor = 0; floor < FloorButtonPlanning::number_of_floors ; floor++)
+        {
+            floors_cables[floor].clear();
+            putEmptyFloorCables(floor);
         }
         showFloor(0);
         ui->planning_but->setEnabled(true);
@@ -128,6 +136,12 @@ void PlanningWindow::showFloor(int floor_num)
                                         floors_walls[floor_number][i][j].top_wall);
             cell_vector[i][j]->repaintLines();
             cell_vector[i][j]->setDeviceType(floors_devices[floor_number][i][j]);
+            cell_vector[i][j]->resetCables();
+            Cables cables = floors_cables[floor_number][i][j];
+            if (cables.bottom_cable) cell_vector[i][j]->setCable(CABLE_BOTTOM, cables.bottom_color.r, cables.bottom_color.g, cables.bottom_color.b);
+            if (cables.top_cable) cell_vector[i][j]->setCable(CABLE_TOP, cables.top_color.r, cables.top_color.g, cables.top_color.b);
+            if (cables.right_cable) cell_vector[i][j]->setCable(CABLE_RIGHT, cables.right_color.r, cables.right_color.g, cables.right_color.b);
+            if (cables.left_cable) cell_vector[i][j]->setCable(CABLE_LEFT, cables.left_color.r, cables.left_color.g, cables.left_color.b);
         }
     changeFloorLabel();
 }
@@ -144,6 +158,35 @@ void PlanningWindow::resetCables()
     for (int i = 0; i < height_floor; i++)
         for (int j = 0; j < width_floor ; j++)
             cell_vector[i][j]->resetCables();
+}
+
+void PlanningWindow::saveFloorCables()
+{
+    floors_cables[floor_number].clear();
+    for (int i = 0; i < height_floor; i++)
+    {
+        floors_cables[floor_number].push_back(std::vector<Cables>());
+        for (int j = 0; j < width_floor ; j++)
+            floors_cables[floor_number][i].push_back(cell_vector[i][j]->getCables());
+    }
+}
+
+void PlanningWindow::putEmptyFloorCables(int floor_num)
+{
+    floors_cables[floor_num].clear();
+    for (int i = 0; i < height_floor; i++)
+    {
+        floors_cables[floor_num].push_back(std::vector<Cables>());
+        for (int j = 0; j < width_floor ; j++)
+        {
+            Cables cables;
+            cables.bottom_cable = false;
+            cables.right_cable  = false;
+            cables.left_cable   = false;
+            cables.top_cable    = false;
+            floors_cables[floor_num][i].push_back(cables);
+        }
+    }
 }
 
 void PlanningWindow::analyzeDevices()
