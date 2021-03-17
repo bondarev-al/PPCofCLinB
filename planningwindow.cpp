@@ -434,64 +434,212 @@ int PlanningWindow::doPlanningAlongThrough()
             Wall nearest_wall_y(EMPTY_VALUE, EMPTY_VALUE);
             int nearest_wall_x_coord;
             int nearest_wall_y_coord;
-            findNearestWalls(pc, nearest_switch, nearest_wall_x, nearest_wall_y, nearest_wall_x_coord, nearest_wall_y_coord);
-//            cable_quanity += min_distance;
-//            if (nearest_switch.x() > pc.x())
-//            {
-//                if (nearest_switch.y() > pc.y())
-//                {
-//                    for (int j = pc.y() + 1; j <= nearest_switch.y() ; j++)
-//                        cell_vector[pc.x()][j]->setCable(CABLE_TOP, 0, color_g, color_b);
-//                    for (int i = pc.x(); i < nearest_switch.x() ; i++)
-//                         cell_vector[i][nearest_switch.y()]->setCable(CABLE_RIGHT, 0, color_g, color_b);
-//                }
-//                else if (nearest_switch.y() < pc.y())
-//                {
-//                    for (int j = pc.y() - 1; j >= nearest_switch.y() ; j--)
-//                        cell_vector[pc.x()][j]->setCable(CABLE_TOP, 0, color_g, color_b);
-//                    for (int i = pc.x(); i < nearest_switch.x() ; i++)
-//                         cell_vector[i][nearest_switch.y()]->setCable(CABLE_LEFT, 0, color_g, color_b);
-//                }
-//                else
-//                    for (int i = pc.x() + 1; i <= nearest_switch.x() ; i++)
-//                         cell_vector[i][nearest_switch.y()]->setCable(CABLE_RIGHT, 0, color_g, color_b);
-//            }
-//            else if (nearest_switch.x() < pc.x())
-//            {
-//                if (nearest_switch.y() > pc.y())
-//                {
-//                    for (int j = pc.y() + 1; j <= nearest_switch.y() ; j++)
-//                        cell_vector[pc.x()][j]->setCable(CABLE_BOTTOM, 0, color_g, color_b);
-//                    for (int i = pc.x(); i > nearest_switch.x() ; i--)
-//                         cell_vector[i][nearest_switch.y()]->setCable(CABLE_RIGHT, 0, color_g, color_b);
-//                }
-//                else if (nearest_switch.y() < pc.y())
-//                {
-//                    for (int j = pc.y() - 1; j >= nearest_switch.y() ; j--)
-//                        cell_vector[pc.x()][j]->setCable(CABLE_BOTTOM, 0, color_g, color_b);
-//                    for (int i = pc.x(); i > nearest_switch.x() ; i--)
-//                         cell_vector[i][nearest_switch.y()]->setCable(CABLE_LEFT, 0, color_g, color_b);
-//                }
-//                else
-//                    for (int i = pc.x() - 1; i >= nearest_switch.x() ; i--)
-//                         cell_vector[i][nearest_switch.y()]->setCable(CABLE_RIGHT, 0, color_g, color_b);
-//            }
-//            else
-//            {
-//                if (nearest_switch.y() > pc.y())
-//                    for (int j = pc.y() + 1; j <= nearest_switch.y() ; j++)
-//                        cell_vector[pc.x()][j]->setCable(CABLE_BOTTOM, 0, color_g, color_b);
-//                else
-//                    for (int j = pc.y() - 1; j >= nearest_switch.y() ; j--)
-//                        cell_vector[pc.x()][j]->setCable(CABLE_BOTTOM, 0, color_g, color_b);
-//            }
-//            if (color_g > 100) color_g -= 60;
-//            else if (color_b < 200) color_b += 60;
-//            else
-//            {
-//                color_g = 255;
-//                color_b = 0;
-//            }
+            bool reached_x = false;
+            bool reached_y = false;
+            bool first_cable = true;
+            int  v_cable_type, h_cable_type;
+            if (nearest_switch.x() >= pc.x()) h_cable_type = CABLE_BOTTOM;
+            else h_cable_type = CABLE_TOP;
+            if (nearest_switch.y() >= pc.y()) v_cable_type = CABLE_RIGHT;
+            else v_cable_type = CABLE_LEFT;
+            QPoint position(pc.x(), pc.y());
+            while (!reached_x || !reached_y)
+            {
+                findNearestWalls(position, nearest_switch, nearest_wall_x, nearest_wall_y, nearest_wall_x_coord, nearest_wall_y_coord);
+                if ((nearest_wall_x_coord != EMPTY_VALUE) || (nearest_wall_y_coord != EMPTY_VALUE))
+                {
+                    if (nearest_wall_x_coord > position.x()) nearest_wall_x_coord--;
+                    if (nearest_wall_y_coord > position.y()) nearest_wall_y_coord--;
+                    int distance_x = abs(position.x() - nearest_wall_x_coord);
+                    int distance_y = abs(position.y() - nearest_wall_y_coord);
+                    if (distance_x <= distance_y)
+                    {
+                        if (distance_x != 0)
+                        {
+                            int begin;
+                            if (nearest_wall_x_coord > position.x()) begin = position.x() + 1;
+                            else begin = position.x() - 1;
+                            int end = nearest_wall_x_coord;
+                            int cable_type;
+                            if (first_cable)
+                            {
+                                first_cable = false;
+                                if (nearest_switch.y() > pc.y()) cable_type = CABLE_LEFT;
+                                else cable_type = CABLE_RIGHT;
+                            }
+                            else cable_type = v_cable_type;
+                            showCableBetweenX(begin, end, position.y(), cable_type, 0, color_g, color_b);
+                            cable_quanity += distance_x;
+                            position.setX(end);
+                        }
+                        if (nearest_switch.y() != position.y())
+                        {
+                            int cable_type;
+                            if (first_cable)
+                            {
+                                first_cable = false;
+                                if (nearest_switch.x() > pc.x()) cable_type = CABLE_TOP;
+                                else cable_type = CABLE_BOTTOM;
+                            }
+                            else cable_type = h_cable_type;
+                            int begin;
+                            if (distance_x != 0) begin = position.y();
+                            else if (nearest_switch.y() > position.y()) begin = position.y() + 1;
+                            else begin = position.y() - 1;
+                            int end;
+                            if (nearest_switch.y() > position.y())
+                            {
+                                if (nearest_switch.y() <= nearest_wall_x.getEnd()) end = nearest_switch.y();
+                                else end = nearest_wall_x.getEnd() + 1;
+                            }
+                            else
+                            {
+                                if (nearest_switch.y() >= nearest_wall_x.getBegin()) end = nearest_switch.y();
+                                else end = nearest_wall_x.getBegin() - 1;
+                            }
+                            showCableBetweenY(begin, end, position.x(), cable_type, 0, color_g, color_b);
+                            cable_quanity += abs(end - begin) + 1;
+                            position.setY(end);
+                        }
+                        else if (nearest_switch.x() != position.x())
+                        {
+                            int cable_type;
+                            if (first_cable)
+                            {
+                                first_cable = false;
+                                if (nearest_switch.y() > pc.y()) cable_type = CABLE_LEFT;
+                                else cable_type = CABLE_RIGHT;
+                            }
+                            else cable_type = v_cable_type;
+                            int begin;
+                            if (nearest_switch.x() > position.x()) begin = position.x() + 1;
+                            else begin = position.x() - 1;
+                            showCableBetweenX(begin, begin, position.y(), cable_type, 0, color_g, color_b);
+                            cable_quanity++;
+                            position.setX(begin);
+                        }
+                    }
+                    else
+                    {
+                        if (distance_y != 0)
+                        {
+                            int begin;
+                            if (nearest_wall_y_coord > position.y()) begin = position.y() + 1;
+                            else begin = position.y() - 1;
+                            int end = nearest_wall_y_coord;
+                            int cable_type;
+                            if (first_cable)
+                            {
+                                first_cable = false;
+                                if (nearest_switch.x() > pc.x()) cable_type = CABLE_TOP;
+                                else cable_type = CABLE_BOTTOM;
+                            }
+                            else cable_type = h_cable_type;
+                            showCableBetweenY(begin, end, position.x(), cable_type, 0, color_g, color_b);
+                            cable_quanity += distance_y;
+                            position.setY(end);
+                        }
+                        if (nearest_switch.x() != position.x())
+                        {
+                            int cable_type;
+                            if (first_cable)
+                            {
+                                first_cable = false;
+                                if (nearest_switch.y() > pc.y()) cable_type = CABLE_LEFT;
+                                else cable_type = CABLE_RIGHT;
+                            }
+                            else cable_type = v_cable_type;
+                            int begin;
+                            if (distance_y != 0) begin = position.x();
+                            else if (nearest_switch.x() > position.x()) begin = position.x() + 1;
+                            else begin = position.x() - 1;
+                            int end;
+                            if (nearest_switch.x() > position.x())
+                            {
+                                if (nearest_switch.x() <= nearest_wall_y.getEnd()) end = nearest_switch.x();
+                                else end = nearest_wall_y.getEnd() + 1;
+                            }
+                            else
+                            {
+                                if (nearest_switch.x() >= nearest_wall_y.getBegin()) end = nearest_switch.x();
+                                else end = nearest_wall_y.getBegin() - 1;
+                            }
+                            showCableBetweenX(begin, end, position.y(), cable_type, 0, color_g, color_b);
+                            cable_quanity += abs(end - begin) + 1;
+                            position.setX(end);
+                        }
+                        else if (nearest_switch.y() != position.y())
+                        {
+                            int cable_type;
+                            if (first_cable)
+                            {
+                                first_cable = false;
+                                if (nearest_switch.x() > pc.x()) cable_type = CABLE_TOP;
+                                else cable_type = CABLE_BOTTOM;
+                            }
+                            else cable_type = h_cable_type;
+                            int begin;
+                            if (nearest_switch.y() > position.y()) begin = position.y() + 1;
+                            else begin = position.y() - 1;
+                            showCableBetweenY(begin, begin, position.x(), cable_type, 0, color_g, color_b);
+                            cable_quanity++;
+                            position.setY(begin);
+                        }
+                    }
+                }
+                else
+                {
+                    if (position.x() != nearest_switch.x())
+                    {
+                        int cable_type;
+                        if (first_cable)
+                        {
+                            first_cable = false;
+                            if (nearest_switch.y() > pc.y()) cable_type = CABLE_LEFT;
+                            else cable_type = CABLE_RIGHT;
+                        }
+                        else cable_type = v_cable_type;
+                        int begin;
+                        if (position != pc) begin = position.x();
+                        else if (nearest_switch.x() > pc.x()) begin = pc.x() + 1;
+                        else begin = pc.x() - 1;
+                        int end = nearest_switch.x();
+                        showCableBetweenX(begin, end, position.y(), cable_type, 0, color_g, color_b);
+                        cable_quanity += abs(end - begin) + 1;
+                        position.setX(end);
+                    }
+                    if (position.y() != nearest_switch.y())
+                    {
+                        int cable_type;
+                        if (first_cable)
+                        {
+                            first_cable = false;
+                            if (nearest_switch.x() > pc.x()) cable_type = CABLE_TOP;
+                            else cable_type = CABLE_BOTTOM;
+                        }
+                        else cable_type = h_cable_type;
+                        int begin;
+                        if (position != pc) begin = position.y();
+                        else if (nearest_switch.y() > pc.y()) begin = pc.y() + 1;
+                        else begin = pc.y() - 1;
+                        int end = nearest_switch.y();
+                        showCableBetweenY(begin, end, position.x(), cable_type, 0, color_g, color_b);
+                        cable_quanity += abs(end - begin) + 1;
+                        position.setY(end);
+                    }
+
+                }
+                if (nearest_switch.x() == position.x()) reached_x = true;
+                if (nearest_switch.y() == position.y()) reached_y = true;
+            }
+
+            if (color_g > 100) color_g -= 60;
+            else if (color_b < 200) color_b += 60;
+            else
+            {
+                color_g = 255;
+                color_b = 0;
+            }
         }
     }
     return cable_quanity;
