@@ -92,6 +92,16 @@
        </layout>
       </item>
       <item>
+       <widget class="QLabel" name="floor_cable_quanity_lab">
+        <property name="text">
+         <string>Количество кабеля на этаж: 0</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QFrame" name="planning_frame">
         <property name="frameShape">
          <enum>QFrame::Box</enum>

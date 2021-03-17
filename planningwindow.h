@@ -25,7 +25,7 @@ public:
     void setupMenu();
     bool setSize(int height, int width);
     void showFloor(int floor_num);
-    void changeFloorLabel();
+    void changeFloorLabels();
     void analyzeDevices();
     void analyzeWalls();
     void resetCables();
@@ -52,10 +52,12 @@ private:
     int width_floor;
     int height_floor;
     int floor_number;
+    int cable_quanity;
     std::vector<FloorButtonPlanning *>                 floors_but_vec;
     std::vector<std::vector<std::vector<Walls>>>       floors_walls;
     std::vector<std::vector<std::vector<Cables>>>      floors_cables;
     std::vector<std::vector<std::vector<int>>>         floors_devices;
+    std::vector<int>                                   floors_cable_quanity;
     std::vector<std::vector<BuildingCellPlanning *>>   cell_vector;
     std::vector<QPoint>                                pcs_vector;
     std::vector<QPoint>                                switches_vector;

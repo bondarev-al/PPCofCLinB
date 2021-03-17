@@ -80,10 +80,12 @@ void PlanningWindow::on_openBuildingAct_triggered()
                 }
             }
         }
+        floors_cable_quanity.clear();
         for (int floor = 0; floor < FloorButtonPlanning::number_of_floors ; floor++)
         {
             floors_cables[floor].clear();
             putEmptyFloorCables(floor);
+            floors_cable_quanity.push_back(0);
         }
         showFloor(0);
         ui->planning_but->setEnabled(true);
@@ -143,14 +145,18 @@ void PlanningWindow::showFloor(int floor_num)
             if (cables.right_cable) cell_vector[i][j]->setCable(CABLE_RIGHT, cables.right_color.r, cables.right_color.g, cables.right_color.b);
             if (cables.left_cable) cell_vector[i][j]->setCable(CABLE_LEFT, cables.left_color.r, cables.left_color.g, cables.left_color.b);
         }
-    changeFloorLabel();
+    cable_quanity = floors_cable_quanity[floor_number];
+    changeFloorLabels();
 }
 
-void PlanningWindow::changeFloorLabel()
+void PlanningWindow::changeFloorLabels()
 {
     QString string = "Этаж - ";
     string += QString::number(floor_number + 1);
     ui->floor_num_lab->setText(string);
+    string = "Количество кабеля на этаж: ";
+    string += QString::number(cable_quanity);
+    ui->floor_cable_quanity_lab->setText(string);
 }
 
 void PlanningWindow::resetCables()
@@ -169,6 +175,7 @@ void PlanningWindow::saveFloorCables()
         for (int j = 0; j < width_floor ; j++)
             floors_cables[floor_number][i].push_back(cell_vector[i][j]->getCables());
     }
+    floors_cable_quanity[floor_number] = cable_quanity;
 }
 
 void PlanningWindow::putEmptyFloorCables(int floor_num)
@@ -276,16 +283,15 @@ void PlanningWindow::on_planning_but_clicked()
 {
     resetCables();
     analyzeDevices();
-    int cable_quanity = 0;
+    cable_quanity = 0;
     if (!ui->along_walls_but->isChecked())
-    {
         cable_quanity = doPlanningNotAlongThrough();
-    }
     else
     {
         analyzeWalls();
         cable_quanity = doPlanningAlongThrough();
     }
+    changeFloorLabels();
 }
 
 int PlanningWindow::findNearestSwitch(const QPoint &pc, QPoint &nearest_switch)
@@ -473,6 +479,7 @@ int PlanningWindow::doPlanningAlongThrough()
         int min_distance = findNearestSwitch(pc, nearest_switch);
         if (min_distance != EMPTY_VALUE)
         {
+            cable_quanity += min_distance;
             Wall nearest_wall_x(EMPTY_VALUE, EMPTY_VALUE);
             Wall nearest_wall_y(EMPTY_VALUE, EMPTY_VALUE);
             int nearest_wall_x_coord;
@@ -503,7 +510,6 @@ int PlanningWindow::doPlanningAlongThrough()
                             else begin = position.x() - 1;
                             int end = nearest_wall_x_coord;
                             showCableBetweenX(begin, end, position.y(), v_cable_type, 0, color_g, color_b);
-                            cable_quanity += distance_x;
                             position.setX(end);
                         }
                         if (nearest_switch.y() != position.y())
@@ -523,7 +529,6 @@ int PlanningWindow::doPlanningAlongThrough()
                                 else end = nearest_wall_x.getBegin() - 1;
                             }
                             showCableBetweenY(begin, end, position.x(), h_cable_type, 0, color_g, color_b);
-                            cable_quanity += abs(end - begin) + 1;
                             position.setY(end);
                         }
                         else if (nearest_switch.x() != position.x())
@@ -532,7 +537,6 @@ int PlanningWindow::doPlanningAlongThrough()
                             if (nearest_switch.x() > position.x()) begin = position.x() + 1;
                             else begin = position.x() - 1;
                             showCableBetweenX(begin, begin, position.y(), v_cable_type, 0, color_g, color_b);
-                            cable_quanity++;
                             position.setX(begin);
                         }
                     }
@@ -545,7 +549,6 @@ int PlanningWindow::doPlanningAlongThrough()
                             else begin = position.y() - 1;
                             int end = nearest_wall_y_coord;
                             showCableBetweenY(begin, end, position.x(), h_cable_type, 0, color_g, color_b);
-                            cable_quanity += distance_y;
                             position.setY(end);
                         }
                         if (nearest_switch.x() != position.x())
@@ -565,7 +568,6 @@ int PlanningWindow::doPlanningAlongThrough()
                                 else end = nearest_wall_y.getBegin() - 1;
                             }
                             showCableBetweenX(begin, end, position.y(), v_cable_type, 0, color_g, color_b);
-                            cable_quanity += abs(end - begin) + 1;
                             position.setX(end);
                         }
                         else if (nearest_switch.y() != position.y())
@@ -574,7 +576,6 @@ int PlanningWindow::doPlanningAlongThrough()
                             if (nearest_switch.y() > position.y()) begin = position.y() + 1;
                             else begin = position.y() - 1;
                             showCableBetweenY(begin, begin, position.x(), h_cable_type, 0, color_g, color_b);
-                            cable_quanity++;
                             position.setY(begin);
                         }
                     }
@@ -588,7 +589,6 @@ int PlanningWindow::doPlanningAlongThrough()
                         else begin = pc.x() - 1;
                         int end = nearest_switch.x();
                         showCableBetweenX(begin, end, position.y(), v_cable_type, 0, color_g, color_b);
-                        cable_quanity += abs(end - begin) + 1;
                         position.setX(end);
                     }
                     if (position.y() != nearest_switch.y())
@@ -598,7 +598,6 @@ int PlanningWindow::doPlanningAlongThrough()
                         else begin = position.y() - 1;
                         int end = nearest_switch.y();
                         showCableBetweenY(begin, end, position.x(), h_cable_type, 0, color_g, color_b);
-                        cable_quanity += abs(end - begin) + 1;
                         position.setY(end);
                     }
 
